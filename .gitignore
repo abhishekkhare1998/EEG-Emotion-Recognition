@@ -1,2 +1,7 @@
-**/Python/Data
+**/Python/Data/*.csv
 **/MATLAB/DREAMER.mat
+**/Python/Data/Baseline/*.csv
+**/Python/Data/Stimuli/*.csv
+**/Python/Data/Metadata/*.csv
+**/MATLAB/*.asv
+

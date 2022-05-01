@@ -1,0 +1,3 @@
+EEG_SamplingRate : 128,
+noOfSubject : 23,
+noOfVideoSequences : 18,
