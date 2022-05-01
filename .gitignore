@@ -4,4 +4,8 @@
 **/Python/Data/Stimuli/*.csv
 **/Python/Data/Metadata/*.csv
 **/MATLAB/*.asv
-
+**/Python/venv/Include/
+**/Python/venv/Scripts/
+**/Python/venv/Lib
+**/Python/venv/share/
+**/Python/.idea
