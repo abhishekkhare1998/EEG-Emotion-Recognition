@@ -17,6 +17,16 @@ class GeneralUtils:
         plt.plot(signal, color="r")
         plt.show()
 
+    def remove_dc(self, signal):
+        """
+        | for removing DC component
+        :param signal:
+        :return: 0 DC signal
+        """
+        dc_comp = sum(signal)/len(signal)
+        new_signal = signal.subtract(dc_comp)
+        return new_signal
+
     def perform_fft(self, signal):
         """
         | performs FFT for input signal

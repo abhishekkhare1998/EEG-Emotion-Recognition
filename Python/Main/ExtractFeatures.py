@@ -6,6 +6,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from scipy.fft import fft, fftfreq
 import Utils.GeneralUtils as g_util
+import Utils.ComputePsd as psd_util
 
 class ExtractFeatures:
     def __init__(self, signal):
@@ -96,21 +97,24 @@ class Data:
 
 def extract_features():
     gen_util_object = g_util.GeneralUtils()
+
     project_root = os.path.abspath(__file__).rsplit("\\", 2)[0]
     baseline_signal_folder = os.path.join(project_root, "Data\\Baseline")
     stimuli_signal_folder = os.path.join(project_root, "Data\\Stimuli")
     metadata_folder = os.path.join(project_root, "Data\\Metadata")
     data_object = Data()
 
-    data_object.plot_signal(sig_type='baseline', person_id=22, emotion_seq=17, electrode_num=13)
+    #data_object.plot_signal(sig_type='stimuli', person_id=21, emotion_seq=17, electrode_num=13)
     #data_object.plot_signal(sig_type='baseline', person_id=1, emotion_seq=1, electrode_num=1)
-    data_object.populate_all_signals()
+    #data_object.populate_all_signals()
 
     input_signal = data_object.get_exact_signal(sig_type='baseline', person_id=22, emotion_seq=17, electrode_num=13)
+    new_inp_signal = gen_util_object.remove_dc(input_signal)
+    gen_util_object.perform_fft(new_inp_signal)
 
-    normalized_inp_sig = np.int16((input_signal / input_signal.max()) * 32767)
-    gen_util_object.perform_fft(normalized_inp_sig)
-
+    psd_util_obj = psd_util.ComputePsd(new_inp_signal)
+    psd_util_obj.compute()
+    a = 1
     """
     for plotting all signals
     
