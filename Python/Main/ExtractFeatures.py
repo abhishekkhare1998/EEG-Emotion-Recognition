@@ -52,7 +52,8 @@ class Data:
         :param electrode_num: which electrode are we viewing
         :return: None
         """
-        req_signal = self.get_exact_signal(sig_type='baseline', person_id=1, emotion_seq=1, electrode_num=1)
+        req_signal = self.get_exact_signal(sig_type=sig_type, person_id=person_id,
+                                           emotion_seq=emotion_seq, electrode_num=electrode_num)
         self.gen_util_object.plot_signal(req_signal)
 
     def get_exact_signal(self, sig_type='baseline', person_id=1, emotion_seq=1, electrode_num=1):
@@ -101,6 +102,7 @@ def extract_features():
     metadata_folder = os.path.join(project_root, "Data\\Metadata")
     data_object = Data()
 
+    data_object.plot_signal(sig_type='baseline', person_id=22, emotion_seq=17, electrode_num=13)
     #data_object.plot_signal(sig_type='baseline', person_id=1, emotion_seq=1, electrode_num=1)
     data_object.populate_all_signals()
 
