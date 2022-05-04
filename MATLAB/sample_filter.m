@@ -59,42 +59,44 @@ ylabel('|P1(f)|')
 % b = firpm(n,fo,ao,w);
 % fvtool(b,1)
 
-rp = 3;           % Passband ripple in dB 
-rs = 40;          % Stopband ripple in dB
-fs = 128;        % Sampling frequency
-dev = [10^(-rs/20) (10^(rp/20)-1)/(10^(rp/20)+1) 10^(-rs/20)]; 
-
-f = [3 4 7 8];    % Cutoff frequencies
-a = [0 1 0];        % Desired amplitudes
-
-[n,fo,ao,w] = firpmord(f,a,dev,fs);
-bp1 = firpm(n,fo,ao,w);
-
-figure(5)
-freqz(bp1,1,1024,fs)
-title('4-7Hz BP Filter Designed to Specifications')
-
-f = [7 8 12 13];    % Cutoff frequencies
-a = [0 1 0];        % Desired amplitudes
-
-[n,fo,ao,w] = firpmord(f,a,dev,fs);
-bp2 = firpm(n,fo,ao,w);
-
-figure(6)
-freqz(bp2,1,1024,fs)
-title('8-12Hz BP Filter Designed to Specifications')
-
-f = [11 12 30 31];    % Cutoff frequencies
-a = [0 1 0];        % Desired amplitudes
-
-[n,fo,ao,w] = firpmord(f,a,dev,fs);
-bp3 = firpm(n,fo,ao,w);
-
-figure(7)
-freqz(bp3,1,1024,fs)
-title('12-30Hz BP Filter Designed to Specifications')
+% % rp = 3;           % Passband ripple in dB 
+% % rs = 40;          % Stopband ripple in dB
+% % fs = 128;        % Sampling frequency
+% % dev = [10^(-rs/20) (10^(rp/20)-1)/(10^(rp/20)+1) 10^(-rs/20)]; 
+% % 
+% % f = [3 4 7 8];    % Cutoff frequencies
+% % a = [0 1 0];        % Desired amplitudes
+% % 
+% % [n,fo,ao,w] = firpmord(f,a,dev,fs);
+% % bp1 = firpm(n,fo,ao,w);
+% % 
+% % figure(5)
+% % freqz(bp1,1,1024,fs)
+% % title('4-7Hz BP Filter Designed to Specifications')
+% % 
+% % f = [7 8 12 13];    % Cutoff frequencies
+% % a = [0 1 0];        % Desired amplitudes
+% % 
+% % [n,fo,ao,w] = firpmord(f,a,dev,fs);
+% % bp2 = firpm(n,fo,ao,w);
+% % 
+% % figure(6)
+% % freqz(bp2,1,1024,fs)
+% % title('8-12Hz BP Filter Designed to Specifications')
+% % 
+% % f = [11 12 30 31];    % Cutoff frequencies
+% % a = [0 1 0];        % Desired amplitudes
+% % 
+% % [n,fo,ao,w] = firpmord(f,a,dev,fs);
+% % bp3 = firpm(n,fo,ao,w);
+% % 
+% % figure(7)
+% % freqz(bp3,1,1024,fs)
+% % title('12-30Hz BP Filter Designed to Specifications')
 
 %% Test filters with Cosine
+
+[bp1,bp2,bp3,~] =  filter_def(0,0);
 
 % Sine Test
 test_cosine_5hz = cos(2*pi*5*(0:(1/Fs):1/5));
