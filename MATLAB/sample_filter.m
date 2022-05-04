@@ -9,10 +9,7 @@ dreamer_sig1_e1 = dreamer_sig1(:,13);
 Fs = 128;
 N_fft = 128;
 
-% Sine Test
-test_cosine = cos(2*pi*15*(0:(1/Fs):1/15));
 input_sig = dreamer_sig1_e1 - mean(dreamer_sig1_e1);
-
 
 fft_sig1 = fft(input_sig,N_fft);
 fft_sig1 = fft_sig1/max(fft_sig1);
@@ -93,6 +90,46 @@ a = [0 1 0];        % Desired amplitudes
 [n,fo,ao,w] = firpmord(f,a,dev,fs);
 bp3 = firpm(n,fo,ao,w);
 
-figure(6)
+figure(7)
 freqz(bp3,1,1024,fs)
 title('12-30Hz BP Filter Designed to Specifications')
+
+%% Test filters with Cosine
+
+% Sine Test
+test_cosine_5hz = cos(2*pi*5*(0:(1/Fs):1/5));
+test_cosine_9hz = cos(2*pi*9*(0:(1/Fs):1/5));
+test_cosine_20hz = cos(2*pi*20*(0:(1/Fs):1/5));
+test_cosine = test_cosine_5hz + test_cosine_9hz + test_cosine_20hz;
+
+% plot_fft(test_cosine,8,Fs,N_fft);
+
+output_cosine_5hz = filter(bp1,1,test_cosine);
+
+% plot_fft(output_cosine_5hz,10,Fs,N_fft);
+
+output_cosine_9hz = filter(bp2,1,test_cosine);
+output_cosine_20hz = filter(bp3,1,test_cosine);
+
+% plot_fft(output_cosine_9hz,12,Fs,N_fft);
+% plot_fft(output_cosine_20hz,14,Fs,N_fft);
+
+plot_fft(filter(bp1,1,input_sig),8,Fs,N_fft);
+plot_fft(filter(bp2,1,input_sig),10,Fs,N_fft);
+plot_fft(filter(bp3,1,input_sig),12,Fs,N_fft);
+
+function plot_fft(input_sig,n,Fs,N_fft)
+
+    fft_sig1 = fft(input_sig,N_fft);
+    fft_sig1 = fft_sig1/max(fft_sig1);
+
+    figure(n)
+    plot((-N_fft/2:N_fft/2-1)*Fs/N_fft,fftshift(abs(fft_sig1)));
+    title("FFT")
+
+    figure(n+1)
+    plot((-N_fft/2:N_fft/2-1)*Fs/N_fft,20*log(fftshift(abs(fft_sig1))));
+    ylabel('Power (db)')
+    title("FFT")
+    
+end
