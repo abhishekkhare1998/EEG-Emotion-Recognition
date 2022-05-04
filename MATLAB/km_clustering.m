@@ -14,16 +14,7 @@ end
 
 
 [class_averages_rand, clustered_data_rand] = perform_km_clustering(data.all_features, random_init_images);
-
-
-rand_training_img_indexes = floor(5000*rand(1, 10));
-random_images_from_set = training_images(:,:,rand_training_img_indexes) ;
-[class_averages, clustered_data] = perform_km_clustering(training_images, random_images_from_set);
-
-class_averages_new = zeros(28,28,10); % To be Selected Maually
-average_labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-[classified_data, error_rate_matrix] = perform_knn(class_averages_new, test_images, test_labels, average_labels);
-
+a = 1;
 
 function [class_averages, clustered_data] = perform_km_clustering(training_images, averages)
 classified_data = perform_knn(averages, training_images);
