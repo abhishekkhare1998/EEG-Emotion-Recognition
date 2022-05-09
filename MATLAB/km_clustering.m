@@ -1,11 +1,11 @@
-data = load("all_features.mat");
+data = load("all_features_amigos.mat");
 k = 8;
 
 avg_vector = zeros(1, 42);
-for i = 1:length(data.all_features(:,1))
-    avg_vector = avg_vector + data.all_features(i,:);
+for i = 1:length(data.per_user(:,1))
+    avg_vector = avg_vector + data.per_user(i,:);
 end
-avg_vector = avg_vector/length(data.all_features(:,1));
+avg_vector = avg_vector/length(data.per_user(:,1));
 
 random_init_images = zeros(1, 42, k);
 for i = 1:k
@@ -13,7 +13,10 @@ for i = 1:k
 end
 
 
-[class_averages_rand, clustered_data_rand] = perform_km_clustering(data.all_features, random_init_images);
+[class_averages_rand, clustered_data_rand] = perform_km_clustering(data.per_user, random_init_images);
+clustered_data_rand = clustered_data_rand + 1;
+C = hist(clustered_data_rand,1:max(clustered_data_rand));
+histogram('Categories',string((1:8)),'BinCounts',C)
 a = 1;
 
 function [class_averages, clustered_data] = perform_km_clustering(training_images, averages)
@@ -30,6 +33,7 @@ while num_of_changes >= 4
 end
 clustered_data = classified_data_new;
 class_averages = new_averages;
+
 
 end
 
