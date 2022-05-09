@@ -1,22 +1,46 @@
-data = load("all_features_amigos.mat");
-k = 8;
-
-avg_vector = zeros(1, 42);
-for i = 1:length(data.per_user(:,1))
-    avg_vector = avg_vector + data.per_user(i,:);
+db_name = 'AMIGOS';   % AMIGOS, DREAMER
+k_clusters = 4;
+use_PCA = true;
+PCA_dimensions = 10;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if strcmp(db_name,'AMIGOS')
+    load_file_name = "all_features_amigos.mat";
+    data = load(load_file_name);
+    input = data.per_user;
 end
-avg_vector = avg_vector/length(data.per_user(:,1));
+if strcmp(db_name,'DREAMER')
+    load_file_name = "all_features.mat";
+    data = load(load_file_name);
+    input = data.all_features;
+end
 
-random_init_images = zeros(1, 42, k);
-for i = 1:k
+
+
+feat_vec_length = length(input(1,:));
+if (use_PCA)
+[wcoeff,~,latent,~,explained] = pca(input','VariableWeights','variance');
+feat_vec_length = PCA_dimensions;
+final_inp = wcoeff(:,1:PCA_dimensions);
+else
+    final_inp = input;
+end
+
+avg_vector = zeros(1, feat_vec_length);
+
+for i = 1:length(input(:,1))
+    avg_vector = avg_vector + input(i,1:feat_vec_length);
+end
+avg_vector = avg_vector/length(input(:,1));
+
+random_init_images = zeros(1, feat_vec_length, k_clusters);
+for i = 1:k_clusters
     random_init_images(:, :, i) = randomise_image(avg_vector);
 end
 
-
-[class_averages_rand, clustered_data_rand] = perform_km_clustering(data.per_user, random_init_images);
+[class_averages_rand, clustered_data_rand] = perform_km_clustering(input(:,1:feat_vec_length), random_init_images);
 clustered_data_rand = clustered_data_rand + 1;
 C = hist(clustered_data_rand,1:max(clustered_data_rand));
-histogram('Categories',string((1:8)),'BinCounts',C)
+histogram('Categories',string((1:k_clusters)),'BinCounts',C)
 a = 1;
 
 function [class_averages, clustered_data] = perform_km_clustering(training_images, averages)
@@ -46,14 +70,14 @@ end
 function new_averages = calculate_new_averages(classified_data, images, num_of_clusters)
 cluster_matrix(1:num_of_clusters,1:length(classified_data)) = -1;
 temp_ary = zeros(num_of_clusters, 1);
-new_averages = zeros(1, 42, 8);
+new_averages = zeros(1, length(images(1,:)), num_of_clusters);
     for i = 1:length(classified_data)
         cluster_matrix(classified_data(i)+1, temp_ary(classified_data(i)+1)+1) = i;
         temp_ary(classified_data(i)+1) = temp_ary(classified_data(i)+1) + 1;
     end
 
 for i = 1:num_of_clusters
-    sum = zeros(1, 42);
+    sum = zeros(1, length(images(1,:)));
     for j=1:temp_ary(i)
         sum = sum + images(cluster_matrix(i, j), :);
     end
@@ -103,8 +127,8 @@ end
 function serial_vec = serialise_vector(vector)
     init_vec_len = zeros(1, length(vector(1,:))*length(vector(:, 1)));
     pointer = 1;
-    for k = 1:length(vector(:,1))
-        init_vec_len(1, pointer:pointer+length(vector(1,:))-1) = vector(k, :);
+    for k_clusters = 1:length(vector(:,1))
+        init_vec_len(1, pointer:pointer+length(vector(1,:))-1) = vector(k_clusters, :);
         pointer = pointer + length(vector(1,:));
     end
     serial_vec = init_vec_len;
