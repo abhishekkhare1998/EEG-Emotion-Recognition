@@ -22,9 +22,9 @@ end
 
 feat_vec_length = length(input(1,:));
 if (use_PCA)
-[wcoeff,~,latent,~,explained] = pca(input','VariableWeights','variance');
+[coeff,score,latent] = pca(input','VariableWeights','variance');
 feat_vec_length = PCA_dimensions;
-final_inp = wcoeff(:,1:PCA_dimensions);
+final_inp = coeff(:,1:PCA_dimensions);
 else
     final_inp = input;
 end
