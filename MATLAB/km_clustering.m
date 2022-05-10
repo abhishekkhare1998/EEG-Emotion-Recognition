@@ -1,5 +1,5 @@
-db_name = 'AMIGOS';   % AMIGOS, DREAMER
-k_clusters = 4;
+db_name = 'ONE_TYPE_CLUSTER';   % AMIGOS, DREAMER, ONE_TYPE_CLUSTER
+k_clusters = 5;
 use_PCA = true;
 PCA_dimensions = 10;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -13,8 +13,12 @@ if strcmp(db_name,'DREAMER')
     data = load(load_file_name);
     input = data.all_features;
 end
-
-
+if strcmp(db_name,'ONE_TYPE_CLUSTER')
+    load_file_name = "one_type_clust.mat";
+    data = load(load_file_name);
+    input = data.one_type_clust;
+    clear data;
+end
 
 feat_vec_length = length(input(1,:));
 if (use_PCA)
