@@ -10,12 +10,12 @@ Author:
 from time import time
 import numpy as np
 import keras.backend as K
-from keras.engine.topology import Layer, InputSpec
+from tensorflow.keras.layers import Layer, InputSpec
 from keras.layers import Dense, Input
 from keras.models import Model
 from keras.optimizers import SGD
 from keras import callbacks
-from keras.initializers import VarianceScaling
+from tensorflow.keras.initializers import VarianceScaling
 from sklearn.cluster import KMeans
 import metrics
 
@@ -282,8 +282,9 @@ if __name__ == "__main__":
         os.makedirs(args.save_dir)
 
     # load dataset
-    from datasets import load_data
-    x, y = load_data(args.dataset)
+    #from datasets import load_data
+    #x, y = load_data(args.dataset)
+    x, y = 0, 0
     n_clusters = len(np.unique(y))
 
     init = 'glorot_uniform'
