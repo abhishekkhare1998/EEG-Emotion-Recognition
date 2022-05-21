@@ -1,12 +1,17 @@
 cycler==0.11.0
 fonttools==4.33.3
 joblib==1.1.0
+keras==2.9.0
 kiwisolver==1.4.2
 matplotlib==3.5.1
+metrics==0.3.3
 numpy==1.21.6
 packaging==21.3
 pandas==1.1.5
+pathlib2==2.3.7.post1
+pathspec==0.5.5
 Pillow==9.1.0
+Pygments==2.2.0
 pyparsing==3.0.8
 python-dateutil==2.8.2
 pytz==2022.1
