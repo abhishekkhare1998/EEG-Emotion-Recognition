@@ -71,9 +71,11 @@ def run_main():
                                             display_labels=[1, 2, 3, 4, 5, 6, 7, 8, 9])
         cm_display.plot()
         plt.title('Method used - {}, tested on training data'.format(i))
+        plt.savefig('{}_on_training.png'.format(i))
         plt.show()
-        #plt.savefig('{}_on_training.png'.format(i))
-        print("percentage accuracy using [{}] on training data = {}% ".format(i, percentage_accuracy))
+
+        plt.close('all')
+        print("percentage accuracy using [{}] on training data = {:.2f}% ".format(i, percentage_accuracy))
 
         train_data, test_data, training_labels, test_labels = train_test_split(input_data,
                                                             labels_values,
@@ -85,10 +87,12 @@ def run_main():
                                             display_labels=[1, 2, 3, 4, 5, 6, 7, 8, 9])
         cm_display.plot()
         plt.title('Method used - {}, tested on TEST data'.format(i))
+        plt.savefig('{}_on_test.png'.format(i))
         plt.show()
-        #plt.savefig('{}_on_test.png'.format(i))
-        print("percentage accuracy using [{}] on test data = {}% ".format(i, percentage_accuracy))
-        a = 1
+
+        plt.close('all')
+        print("percentage accuracy using [{}] on test data = {:.2f}% ".format(i, percentage_accuracy))
+
 
 
 
