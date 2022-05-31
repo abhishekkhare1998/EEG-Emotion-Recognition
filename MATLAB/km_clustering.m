@@ -1,7 +1,7 @@
-db_name = 'ONE_TYPE_CLUSTER';   % AMIGOS, DREAMER, ONE_TYPE_CLUSTER
-k_clusters = 5;
+db_name = 'AMIGOS';   % AMIGOS, DREAMER, ONE_TYPE_CLUSTER
+k_clusters = 6;
 use_PCA = true;
-PCA_dimensions = 10;
+PCA_dimensions = 3;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if strcmp(db_name,'AMIGOS')
     load_file_name = "all_features_amigos.mat";

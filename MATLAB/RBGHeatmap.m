@@ -19,7 +19,7 @@ electrode_coord = electrode_coord + 1;
 
 features = data.all_features;
 
-user11 = features(100,:);
+user11 = features(185,:);
 red11 = user11(1:14);
 blue11 = user11(15:28);
 green11 = user11(29:42);
