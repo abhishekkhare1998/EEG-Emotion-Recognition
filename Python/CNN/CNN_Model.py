@@ -21,30 +21,26 @@ class CNN1(nn.Module):
             self.model = pretrainedmodels.__dict__["resnet34"](pretrained="imagenet")
         else:
             self.model = pretrainedmodels.__dict__["resnet34"](pretrained=None)
-        self.fc1 = nn.Linear(512, 100)  #For age class
-        self.fc2 = nn.Linear(512, 2)    #For gender class
-        self.fc3 = nn.Linear(512, 4)    #For race class
+        self.fc1 = nn.Linear(512, 3)    #For valence class
+        self.fc2 = nn.Linear(512, 3)    #For arousal class
         
     def forward(self, x):
         bs, _, _, _ = x.shape
         x = self.model.features(x)
         x = F.adaptive_avg_pool2d(x, 1).reshape(bs, -1)
         label1 = self.fc1(x)
-        label2= torch.sigmoid(self.fc2(x))  
-        label3= self.fc3(x)
-        return {'label1': label1, 'label2': label2, 'label3': label3}
+        label2= self.fc2(x) 
+        return {'label1': label1, 'label2': label2}
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 #Setting model and moving to device
 model_CNN = CNN1(True).to(device)
-#For binary output:gender
-criterion_binary= nn.BCELoss()
 #For multilabel output: race and age
 criterion_multioutput = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model_CNN.parameters(), lr=0.001, momentum=0.9)
 
-def train_model(model, criterion1, criterion2, optimizer, n_epochs=25):
+def train_model(model, criterion1, optimizer, n_epochs=25):
     """returns trained model"""
     # initialize tracker for minimum validation loss
     valid_loss_min = np.Inf
@@ -55,21 +51,18 @@ def train_model(model, criterion1, criterion2, optimizer, n_epochs=25):
         model.train()
         for batch_idx, sample_batched in enumerate(train_dataloader):
             # importing data and moving to GPU
-            image, label1, label2, label3 = sample_batched['image'].to(device),\
-                                             sample_batched['label_age'].to(device),\
-                                              sample_batched['label_gender'].to(device),\
-                                               sample_batched['label_race'].to(device)  
+            image, label1, label2 = sample_batched['image'].to(device),\
+                                             sample_batched['label_valence'].to(device),\
+                                              sample_batched['label_arousal'].to(device) 
             # zero the parameter gradients
             optimizer.zero_grad()
             output=model(image)
             label1_hat=output['label1']
-            label2_hat=output['label2']
-            label3_hat=output['label3']         
+            label2_hat=output['label2']        
             # calculate loss
             loss1=criterion1(label1_hat, label1.squeeze().type(torch.LongTensor))
-            loss2=criterion2(label2_hat, label2.squeeze().type(torch.LongTensor))
-            loss3=criterion1(label3_hat, label3.squeeze().type(torch.LongTensor))     
-            loss=loss1+loss2+loss3
+            loss2=criterion1(label2_hat, label2.squeeze().type(torch.LongTensor))    
+            loss=loss1+loss2
             # back prop
             loss.backward()
             # grad
@@ -81,20 +74,17 @@ def train_model(model, criterion1, criterion2, optimizer, n_epochs=25):
         # validate the model #
         model.eval()
         for batch_idx, sample_batched in enumerate(test_dataloader):
-            image, label1, label2, label3 = sample_batched['image'].to(device),\
-                                             sample_batched['label_age'].to(device),\
-                                              sample_batched['label_gender'].to(device),\
-                                               sample_batched['label_race'].to(device)  
+            image, label1, label2 = sample_batched['image'].to(device),\
+                                             sample_batched['label_valence'].to(device),\
+                                              sample_batched['label_arousal'].to(device)  
             output = model(image)
             output=model(image)
             label1_hat=output['label1']
-            label2_hat=output['label2']
-            label3_hat=output['label3']               
+            label2_hat=output['label2']              
             # calculate loss
             loss1=criterion1(label1_hat, label1.squeeze().type(torch.LongTensor))
-            loss2=criterion2(label2_hat, label2.squeeze().type(torch.LongTensor))
-            loss3=criterion1(label3_hat, label3.squeeze().type(torch.LongTensor))  
-            loss=loss1+loss2+loss3
+            loss2=criterion1(label2_hat, label2.squeeze().type(torch.LongTensor))
+            loss=loss1+loss2
             valid_loss = valid_loss + ((1 / (batch_idx + 1)) * (loss.data - valid_loss))
         
         # print training/validation statistics 
