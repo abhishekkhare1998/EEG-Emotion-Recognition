@@ -10,3 +10,4 @@
 **/Python/venv/share/
 **/Python/.idea
 **/Python/Main/*.png
+*.pyc
