@@ -9,6 +9,7 @@ from sklearn.metrics import ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 from dbn.tensorflow import SupervisedDBNRegression
+import numpy as np
 
 def create_labels_ind(label_dataframe):
     #valence_data = label_dataframe.iloc[:, 0]
@@ -60,9 +61,9 @@ def run_main():
     input_data = pd.read_csv(dataset_path, header=None)
     input_scores_data = pd.read_csv(labels_path, header=None)
 
-    labels_values = create_labels_ind(input_scores_data)
+    labels_values = create_labels(input_scores_data)
 
-    is_supervised = True
+    is_supervised = False
 
     if(is_supervised):
         ss = StandardScaler()
@@ -90,7 +91,7 @@ def run_main():
         valence_data = input_scores_data.iloc[:, 0]
         arousal_data = input_scores_data.iloc[:, 1]
         min_max_scaler = MinMaxScaler()
-        #input_data = min_max_scaler.fit_transform(input_data)
+        input_data = min_max_scaler.fit_transform(input_data)
 
         # Training
         regressor = SupervisedDBNRegression(hidden_layers_structure=[100, 100, 100, 100],
@@ -100,11 +101,11 @@ def run_main():
                                             n_iter_backprop=200,
                                             batch_size=16,
                                             activation_function='relu')
-        regressor.fit(input_data, valence_data)
+        regressor.fit(input_data, np.array(labels_values))
 
         # Test
-        #X_test = min_max_scaler.transform(input_data)
-        Y_pred = regressor.predict(input_data)
+        X_test = min_max_scaler.transform(input_data)
+        Y_pred = regressor.predict(X_test)
         a = 1
 
     a = 1
