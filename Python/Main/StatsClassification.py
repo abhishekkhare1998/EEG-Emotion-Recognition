@@ -16,6 +16,17 @@ def calculate_accuracy(actual_labels, predicted_labels):
 
     return 100*accuracy_percentage, confusion_matrix_out
 
+def create_labels_ind(label_dataframe):
+    #valence_data = label_dataframe.iloc[:, 0]
+    valence_data = label_dataframe.iloc[:, 1]
+    va_list = []
+    for i in valence_data:
+        if i <= 4.5:
+            va_list.append(1)
+        else:
+            va_list.append(2)
+    return va_list
+
 def create_labels(label_dataframe):
     valence_data = label_dataframe.iloc[:, 0]
     arousal_data = label_dataframe.iloc[:, 1]
@@ -62,13 +73,13 @@ def run_main():
     input_data = pd.read_csv(dataset_path, header=None)
     input_scores_data = pd.read_csv(labels_path, header=None)
 
-    labels_values = create_labels(input_scores_data)
+    labels_values = create_labels_ind(input_scores_data)
     supervised_methods = ["svm", "knn", "d_tree", "g_bayes"]
     for i in supervised_methods:
         predicted_labels, classifier = get_predictions(i, input_data, labels_values)
         percentage_accuracy, confusion_matrix_out = calculate_accuracy(labels_values, predicted_labels)
         cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out,
-                                            display_labels=[1, 2, 3, 4, 5, 6, 7, 8, 9])
+                                            display_labels=[1, 2])
         cm_display.plot()
         plt.title('Method used - {}, tested on training data'.format(i))
         plt.savefig('{}_on_training.png'.format(i))
@@ -84,7 +95,7 @@ def run_main():
         test_predictions = classifier.predict(test_data)
         percentage_accuracy, confusion_matrix_out = calculate_accuracy(test_labels, test_predictions)
         cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out,
-                                            display_labels=[1, 2, 3, 4, 5, 6, 7, 8, 9])
+                                            display_labels=[1, 2])
         cm_display.plot()
         plt.title('Method used - {}, tested on TEST data'.format(i))
         plt.savefig('{}_on_test.png'.format(i))
