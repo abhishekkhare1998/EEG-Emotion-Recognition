@@ -83,6 +83,9 @@ def run_main():
         plt.title('Method used - {}, tested on training data'.format("dbn"))
         plt.savefig('{}\\{}_on_training.png'.format(current_path, "dbn"))
         plt.show()
+
+        plt.close('all')
+        print("percentage accuracy using [{}] on training data = {:.2f}% ".format("dbn", accuracy_percentage * 100))
     else:
         valence_data = input_scores_data.iloc[:, 0]
         arousal_data = input_scores_data.iloc[:, 1]
@@ -104,9 +107,6 @@ def run_main():
         Y_pred = regressor.predict(input_data)
         a = 1
 
-
-    plt.close('all')
-    print("percentage accuracy using [{}] on training data = {:.2f}% ".format("dbn", accuracy_percentage*100))
     a = 1
 
 if __name__=='__main__':
