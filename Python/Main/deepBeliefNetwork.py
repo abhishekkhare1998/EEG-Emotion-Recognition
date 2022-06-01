@@ -7,6 +7,8 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import MinMaxScaler
+from dbn.tensorflow import SupervisedDBNRegression
 
 def create_labels_ind(label_dataframe):
     #valence_data = label_dataframe.iloc[:, 0]
@@ -60,24 +62,48 @@ def run_main():
 
     labels_values = create_labels_ind(input_scores_data)
 
-    ss = StandardScaler()
-    input_data = ss.fit_transform(input_data)
-    x_train, x_test, y_train, y_test = train_test_split(input_data, labels_values, test_size=0.2)
-    clasifier = SupervisedDBNClassification(hidden_layers_structure=[20, 20, 10, 10], learning_rate_rbm=0.05,
+    is_supervised = True
+
+    if(is_supervised):
+        ss = StandardScaler()
+        input_data = ss.fit_transform(input_data)
+        x_train, x_test, y_train, y_test = train_test_split(input_data, labels_values, test_size=0.2)
+        clasifier = SupervisedDBNClassification(hidden_layers_structure=[100, 100, 100, 100], learning_rate_rbm=0.05,
                                             learning_rate=0.05, n_epochs_rbm=5, n_iter_backprop=10, batch_size=8,
                                             activation_function='relu', dropout_p=0.2)
-    clasifier.fit(x_train, y_train)
-    y_pred = clasifier.predict(x_test)
+        clasifier.fit(x_train, y_train)
+        y_pred = clasifier.predict(x_test)
 
-    accuracy_percentage = accuracy_score(y_test, y_pred)
-    confusion_matrix_out = confusion_matrix(y_test, y_pred)
+        accuracy_percentage = accuracy_score(y_test, y_pred)
+        confusion_matrix_out = confusion_matrix(y_test, y_pred)
 
-    cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out,
+        cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out,
                                         display_labels=[1, 2, 3])
-    cm_display.plot()
-    plt.title('Method used - {}, tested on training data'.format("dbn"))
-    plt.savefig('{}_on_training.png'.format("dbn"))
-    plt.show()
+        cm_display.plot()
+        plt.title('Method used - {}, tested on training data'.format("dbn"))
+        plt.savefig('{}\\{}_on_training.png'.format(current_path, "dbn"))
+        plt.show()
+    else:
+        valence_data = input_scores_data.iloc[:, 0]
+        arousal_data = input_scores_data.iloc[:, 1]
+        min_max_scaler = MinMaxScaler()
+        #input_data = min_max_scaler.fit_transform(input_data)
+
+        # Training
+        regressor = SupervisedDBNRegression(hidden_layers_structure=[100, 100, 100, 100],
+                                            learning_rate_rbm=0.01,
+                                            learning_rate=0.01,
+                                            n_epochs_rbm=20,
+                                            n_iter_backprop=200,
+                                            batch_size=16,
+                                            activation_function='relu')
+        regressor.fit(input_data, valence_data)
+
+        # Test
+        #X_test = min_max_scaler.transform(input_data)
+        Y_pred = regressor.predict(input_data)
+        a = 1
+
 
     plt.close('all')
     print("percentage accuracy using [{}] on training data = {:.2f}% ".format("dbn", accuracy_percentage*100))
