@@ -6,6 +6,5 @@ Created on Mon May 30 22:26:57 2022
 @author: gauravsingh
 """
 
-from CNN_Model import model_CNN,train_model,criterion_multioutput, optimizer
 
-model_conv=train_model(model_CNN, criterion_multioutput, optimizer)
+

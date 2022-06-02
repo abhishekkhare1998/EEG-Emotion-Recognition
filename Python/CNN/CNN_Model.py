@@ -17,19 +17,33 @@ from CNN_Run import train_dataloader,test_dataloader
 class CNN1(nn.Module):
     def __init__(self, pretrained):
         super(CNN1, self).__init__()
-        if pretrained is True:
-            self.model = pretrainedmodels.__dict__["resnet34"](pretrained="imagenet")
-        else:
-            self.model = pretrainedmodels.__dict__["resnet34"](pretrained=None)
-        self.fc1 = nn.Linear(512, 3)    #For valence class
-        self.fc2 = nn.Linear(512, 3)    #For arousal class
+        self.conv1 = nn.Conv2d(3, 8, 16)
+        self.conv2 = nn.Conv2d(8, 8, 8)
+        self.fc1 = nn.Linear(3872, 256)
+        self.pool1 = nn.MaxPool2d(8)
+        self.pool2 = nn.MaxPool2d(4)
+        self.fc21 = nn.Linear(256, 3)    #For valence class
+        self.fc22 = nn.Linear(256, 3)    #For arousal class
         
     def forward(self, x):
-        bs, _, _, _ = x.shape
-        x = self.model.features(x)
-        x = F.adaptive_avg_pool2d(x, 1).reshape(bs, -1)
-        label1 = self.fc1(x)
-        label2= self.fc2(x) 
+        
+        x = self.conv1(x) 
+        x = F.relu(x)
+        x = self.pool1(x)
+        
+        x = self.conv2(x)
+        x = F.relu(x)
+        x = self.pool2(x)
+        
+        x = torch.flatten(x, 1)
+        x = self.fc1(x)
+        x = F.relu(x)
+        
+        label1 = self.fc21(x)
+        label1 = F.log_softmax(label1, dim=1)
+
+        label2 = self.fc22(x)
+        label2 = F.log_softmax(label2, dim=1)
         return {'label1': label1, 'label2': label2}
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

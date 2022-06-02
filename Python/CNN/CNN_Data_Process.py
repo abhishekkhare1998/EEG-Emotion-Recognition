@@ -27,15 +27,14 @@ from skimage.transform import AffineTransform, warp
 class MyData(Dataset):
     def __init__(self, train=True, transform=None):
         #Loading train.csv
-        train_df=pd.read_csv('train.csv')
+        train_df=pd.read_csv('img_train.csv')
         #Loading image data and merging with train.csv
-        df=pd.merge(pd.read_parquet('image_train_data.parquet'),\
-        train_df, on='image_id').drop(['image_id'], axis=1)
+        df = pd.read_csv('img_labels.csv')
         #Leaving only image related  columns
-        feature=df.drop(['valence', 'arousal'], axis=1)
+        feature=train_df
         #Setting labels
-        label_valence=df['valence']
-        label_arousal=df['arousal']
+        label_valence=df[:,0]
+        label_arousal=df[:,1]
         #Splitting the data into train and validation set
         X_train, X_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test, y_race_train,\
         = train_test_split(feature, label_valence, label_arousal, test_size=0.2)
