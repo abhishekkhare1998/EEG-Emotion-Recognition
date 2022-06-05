@@ -11,3 +11,4 @@
 **/Python/.idea
 **/Python/Main/*.png
 *.pyc
+!/Python/Main/*.pyc
