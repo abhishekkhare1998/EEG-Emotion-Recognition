@@ -10,6 +10,8 @@
 **/Python/venv/share/
 **/Python/.idea
 **/Python/Main/*.png
+*.pyc
+!/Python/Main/*.pyc
 **/Python/Main/dbn/tensorflow/__pycache__/
 **/Python/Main/dbn/__pycache__
 Python/Main/__pycache__/__init__.cpython-37.pyc

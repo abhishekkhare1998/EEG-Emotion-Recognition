@@ -9,12 +9,22 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
+import random
+import numpy as np
+import SupClassification
 
-def calculate_accuracy(actual_labels, predicted_labels):
-    accuracy_percentage = accuracy_score(actual_labels, predicted_labels)
-    confusion_matrix_out = confusion_matrix(actual_labels, predicted_labels)
-
-    return 100*accuracy_percentage, confusion_matrix_out
+def create_labels_ind(label_dataframe):
+    #valence_data = label_dataframe.iloc[:, 0]
+    valence_data = label_dataframe.iloc[:, 1]
+    va_list = []
+    for i in valence_data:
+        if i <= 3.5:
+            va_list.append(1)
+        if (i > 3.5) and (i <= 6.5):
+            va_list.append(2)
+        if i > 6.5:
+            va_list.append(3)
+    return va_list
 
 def create_labels(label_dataframe):
     valence_data = label_dataframe.iloc[:, 0]
@@ -62,34 +72,54 @@ def run_main():
     input_data = pd.read_csv(dataset_path, header=None)
     input_scores_data = pd.read_csv(labels_path, header=None)
 
-    labels_values = create_labels(input_scores_data)
+    labels_values = create_labels_ind(input_scores_data)
     supervised_methods = ["svm", "knn", "d_tree", "g_bayes"]
+
+    train_data, test_data, training_labels, test_labels = train_test_split(input_data,
+                                                                           labels_values,
+                                                                           test_size=0.2)
     for i in supervised_methods:
         predicted_labels, classifier = get_predictions(i, input_data, labels_values)
-        percentage_accuracy, confusion_matrix_out = calculate_accuracy(labels_values, predicted_labels)
-        cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out,
-                                            display_labels=[1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+        percentage_accuracy_real, confusion_matrix_out_real = SupClassification.SupClassification().calculate_accuracy(actual_labels=labels_values,
+                                                                                                                     predicted_labels=predicted_labels,
+                                                                                                                     method=i,
+                                                                                                                     is_test=False)
+
+        cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out_real,
+                                            display_labels=[1, 2, 3])
         cm_display.plot()
         plt.title('Method used - {}, tested on training data'.format(i))
         plt.savefig('{}_on_training.png'.format(i))
         plt.show()
 
+        plt.cla()
+        plt.close('all')
+        print("percentage accuracy using [{}] on training data = {:.2f}% ".format(i, percentage_accuracy_real))
+
         plt.close('all')
         print("percentage accuracy using [{}] on training data = {:.2f}% ".format(i, percentage_accuracy))
 
-        train_data, test_data, training_labels, test_labels = train_test_split(input_data,
-                                                            labels_values,
-                                                            test_size=0.2)
+
         predicted_labels, classifier = get_predictions(i, train_data, training_labels)
         test_predictions = classifier.predict(test_data)
-        percentage_accuracy, confusion_matrix_out = calculate_accuracy(test_labels, test_predictions)
-        cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out,
-                                            display_labels=[1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+        percentage_accuracy_real, confusion_matrix_out_real = SupClassification.SupClassification().calculate_accuracy(test_labels,
+                                                                                                                     test_predictions,
+                                                                                                                     i,
+                                                                                                                     True)
+        cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out_real,
+                                            display_labels=[1, 2, 3])
         cm_display.plot()
         plt.title('Method used - {}, tested on TEST data'.format(i))
         plt.savefig('{}_on_test.png'.format(i))
         plt.show()
 
+        plt.cla()
+        plt.close('all')
+
+        print("percentage accuracy using [{}] on test data = {:.2f}% ".format(i, percentage_accuracy_real))
+        a = 1
         plt.close('all')
         print("percentage accuracy using [{}] on test data = {:.2f}% ".format(i, percentage_accuracy))
 
