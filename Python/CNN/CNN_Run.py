@@ -8,6 +8,7 @@ Created on Mon May 30 22:14:59 2022
 
 import torch
 from CNN_Data_Process import MyData,crop,rotate_image,RGB_ToTensor,Normalization,DataLoader
+from CNN_Model import model_CNN,train_model,criterion_multioutput, optimizer
 from torchvision import transforms
 
 
@@ -23,3 +24,5 @@ transformed_test_data = MyData(train=False, transform=transforms.Compose([crop(2
                                             cnn_normalization_std)]))
 train_dataloader = DataLoader(transformed_train_data, batch_size=50, shuffle=True, num_workers=4)
 test_dataloader = DataLoader(transformed_test_data, batch_size=50, shuffle=True, num_workers=4)
+
+model_conv=train_model(model_CNN, criterion_multioutput, optimizer)
