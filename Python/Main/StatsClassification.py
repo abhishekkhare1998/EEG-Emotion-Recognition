@@ -103,6 +103,8 @@ def run_main():
     current_time = now.strftime("%m_%d_%Y_%H_%M_%S")
 
     save_folder = os.path.join(current_path, "results", current_time)
+    if not os.path.isdir(os.path.join(current_path, "results")):
+        os.mkdir(os.path.join(current_path, "results"))
     if not os.path.isdir(save_folder):
         os.mkdir(save_folder)
 
