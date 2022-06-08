@@ -11,13 +11,17 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import random
 import numpy as np
-import SupClassification
+import datetime
+import Utils.classification.confusion_matrix.CM_Util as CM_Util
 
-def create_labels_ind(label_dataframe):
-    #valence_data = label_dataframe.iloc[:, 0]
-    valence_data = label_dataframe.iloc[:, 1]
+
+def get_labels_ind(label_dataframe, is_valence):
+    if is_valence:
+        class_data = label_dataframe.iloc[:, 0]
+    else:
+        class_data = label_dataframe.iloc[:, 1]
     va_list = []
-    for i in valence_data:
+    for i in class_data:
         if i <= 3.5:
             va_list.append(1)
         if (i > 3.5) and (i <= 6.5):
@@ -25,6 +29,7 @@ def create_labels_ind(label_dataframe):
         if i > 6.5:
             va_list.append(3)
     return va_list
+
 
 def create_labels(label_dataframe):
     valence_data = label_dataframe.iloc[:, 0]
@@ -53,6 +58,7 @@ def create_labels(label_dataframe):
     labels_num = [labels_dict[i] for i in labels_str_list]
     return labels_num
 
+
 def get_predictions(classification_type, input_data, labels):
     classifiers_dict = {"knn": KNeighborsClassifier(n_neighbors=3),
                            "svm": SVC(kernel='rbf'),
@@ -72,50 +78,60 @@ def run_main():
     input_data = pd.read_csv(dataset_path, header=None)
     input_scores_data = pd.read_csv(labels_path, header=None)
 
-    labels_values = create_labels_ind(input_scores_data)
+    labels_values_valence = get_labels_ind(input_scores_data, True)
+    labels_values_arousal = get_labels_ind(input_scores_data, True)
     supervised_methods = ["svm", "knn", "d_tree", "g_bayes"]
 
-    train_data, test_data, training_labels, test_labels = train_test_split(input_data,
-                                                                           labels_values,
-                                                                           test_size=0.2)
+    current_path = os.getcwd()
+    now = datetime.datetime.now()
+    current_time = now.strftime("%m_%d_%Y_%H_%M_%S")
+
+    save_folder = os.path.join(current_path, "results", current_time)
+    if not os.path.isdir(save_folder):
+        os.mkdir(save_folder)
+
+    for types in ["valence", "arousal"]:
+        if types == "valence":
+            input_labels = labels_values_valence
+            is_valence = True
+        else:
+            input_labels = labels_values_arousal
+            is_valence = False
+
+        train_data, test_data, training_labels, test_labels = train_test_split(input_data,
+                                                                                input_labels,
+                                                                                test_size=0.2)
+
+        dataset_dict = {"train_data": train_data, "training_labels": training_labels,
+                        "test_labels": test_labels, "test_data": test_data}
+
+        prepare_results(supervised_methods, dataset_dict, is_valence, save_folder)
+
+
+def prepare_results(supervised_methods, dataset_dict, is_valence, save_folder):
+    if is_valence:
+        print_str = "valence"
+    else:
+        print_str = "arousal"
+
     for i in supervised_methods:
-        predicted_labels, classifier = get_predictions(i, input_data, labels_values)
 
-        percentage_accuracy_real, confusion_matrix_out_real = SupClassification.SupClassification().calculate_accuracy(actual_labels=labels_values,
-                                                                                                                     predicted_labels=predicted_labels,
-                                                                                                                     method=i,
-                                                                                                                     is_test=False)
+        predicted_labels, classifier = get_predictions(i, dataset_dict["train_data"], dataset_dict["training_labels"])
+        test_predictions = classifier.predict(dataset_dict["test_data"])
 
+        percentage_accuracy_real, confusion_matrix_out_real = CM_Util.CM_Util().calculate_accuracy(dataset_dict["test_labels"],
+                                                                                                    test_predictions,
+                                                                                                    i,
+                                                                                                    is_valence)
         cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out_real,
-                                            display_labels=[1, 2, 3])
+                                            display_labels=["low", "mid", "high"])
         cm_display.plot()
-        plt.title('Method used - {}, tested on training data'.format(i))
-        plt.savefig('{}_on_training.png'.format(i))
-        plt.show()
+        plt.title('Method used - {}, tested on rand Test data'.format(i))
 
-        plt.cla()
-        plt.close('all')
-        print("percentage accuracy using [{}] on training data = {:.2f}% ".format(i, percentage_accuracy_real))
-
-        predicted_labels, classifier = get_predictions(i, train_data, training_labels)
-        test_predictions = classifier.predict(test_data)
-
-        percentage_accuracy_real, confusion_matrix_out_real = SupClassification.SupClassification().calculate_accuracy(test_labels,
-                                                                                                                     test_predictions,
-                                                                                                                     i,
-                                                                                                                     True)
-        cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out_real,
-                                            display_labels=[1, 2, 3])
-        cm_display.plot()
-        plt.title('Method used - {}, tested on TEST data'.format(i))
-        plt.savefig('{}_on_test.png'.format(i))
-        plt.show()
-
-        plt.cla()
-        plt.close('all')
+        plt.savefig('{}\\\\{}_on_{}.png'.format(save_folder, i, print_str))
 
         print("percentage accuracy using [{}] on test data = {:.2f}% ".format(i, percentage_accuracy_real))
-        a = 1
+
 
 
 
