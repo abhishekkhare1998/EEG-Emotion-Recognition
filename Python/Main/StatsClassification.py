@@ -13,6 +13,7 @@ import random
 import numpy as np
 import datetime
 from sys import platform
+import logging
 from classification.Amigos.AmigosUtil import AmigosUtil
 
 
@@ -85,6 +86,7 @@ def run_main():
         dataset_folder_path = os.path.join(current_path.rsplit("\\", 1)[0], "Data", "Extracted_features")
         dataset_path = dataset_folder_path + r"\\" + dataset_used + ".csv"
         labels_path = dataset_folder_path + r"\\" + dataset_used + "_labels.csv"
+
     else:
         current_path = os.path.realpath(__file__).rsplit("/", 1)[0]
         dataset_folder_path = os.path.join(current_path.rsplit(r"/", 1)[0], "Data", "Extracted_features")
@@ -132,6 +134,7 @@ def prepare_results(supervised_methods, dataset_dict, is_valence, save_folder):
     else:
         print_str = "arousal"
 
+    log_text = ""
     for i in supervised_methods:
 
         predicted_labels, classifier = get_predictions(i, dataset_dict["train_data"], dataset_dict["training_labels"])
@@ -147,10 +150,16 @@ def prepare_results(supervised_methods, dataset_dict, is_valence, save_folder):
         cm_display.plot()
         plt.title('Method used - {}, tested on rand Test data'.format(i))
 
-        if "win" in platform:
-            plt.savefig('{}\\\\{}_on_{}.png'.format(save_folder, i, print_str))
-        else:
-            plt.savefig(r'{}/{}_on_{}.png'.format(save_folder, i, print_str))
+        plt.savefig(os.path.join(save_folder, r'{}_on_{}.png'.format(i, print_str)))
+
+
+
+        conf_matrix_prnt = "Method used - {}, tested on |{}| \n accuracy percentage - {:.2f} \n true class on y axis \n {} \n\n".format(i, print_str, percentage_accuracy_output, str(confusion_matrix_output))
+
+        with open(os.path.join(save_folder, "results.txt"), 'a', encoding='utf-8') as f:
+            f.write(conf_matrix_prnt)
+
+        logging.info(conf_matrix_prnt)
 
         print("percentage accuracy using [{}] on {} = {:.2f}% ".format(i, print_str, percentage_accuracy_output))
 
