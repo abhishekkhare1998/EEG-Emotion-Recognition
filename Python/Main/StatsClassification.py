@@ -149,7 +149,7 @@ def prepare_results(supervised_methods, dataset_dict, is_valence, save_folder):
 
         plt.savefig('{}\\\\{}_on_{}.png'.format(save_folder, i, print_str))
 
-        print("percentage accuracy using [{}] on test data = {:.2f}% ".format(i, percentage_accuracy_output))
+        print("percentage accuracy using [{}] on {} = {:.2f}% ".format(i, print_str, percentage_accuracy_output))
 
 
 run_main()
