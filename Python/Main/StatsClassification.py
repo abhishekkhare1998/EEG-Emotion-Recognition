@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import random
 import numpy as np
 import datetime
-import Utils.classification.confusion_matrix.CM_Util as CM_Util
+from classification.Amigos.AmigosUtil import AmigosUtil
 
 
 def get_labels_ind(label_dataframe, is_valence):
@@ -69,6 +69,14 @@ def get_predictions(classification_type, input_data, labels):
     predictions = classifier.predict(input_data)
     return predictions, classifier
 
+
+def calculate_accuracy(test_labels, test_predictions, method, is_valence):
+    acc, cm = AmigosUtil().calculate_accuracy(test_labels,
+                                  test_predictions,
+                                  method,
+                                  is_valence)
+    return acc, cm
+
 def run_main():
     dataset_used = "amigos"  # "amigos" or "dreamer"
     current_path = os.path.realpath(__file__).rsplit("\\", 1)[0]
@@ -118,21 +126,19 @@ def prepare_results(supervised_methods, dataset_dict, is_valence, save_folder):
         predicted_labels, classifier = get_predictions(i, dataset_dict["train_data"], dataset_dict["training_labels"])
         test_predictions = classifier.predict(dataset_dict["test_data"])
 
-        percentage_accuracy_real, confusion_matrix_out_real = CM_Util.CM_Util().calculate_accuracy(dataset_dict["test_labels"],
-                                                                                                    test_predictions,
-                                                                                                    i,
-                                                                                                    is_valence)
+        percentage_accuracy_output, confusion_matrix_output = calculate_accuracy(test_labels=dataset_dict["test_labels"],
+                                                                                 test_predictions=test_predictions,
+                                                                                 method=i,
+                                                                                 is_valence=is_valence)
 
-        results_string = ""
-
-        cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out_real,
+        cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_output,
                                             display_labels=["low", "mid", "high"])
         cm_display.plot()
         plt.title('Method used - {}, tested on rand Test data'.format(i))
 
         plt.savefig('{}\\\\{}_on_{}.png'.format(save_folder, i, print_str))
 
-        print("percentage accuracy using [{}] on test data = {:.2f}% ".format(i, percentage_accuracy_real))
+        print("percentage accuracy using [{}] on test data = {:.2f}% ".format(i, percentage_accuracy_output))
 
 
 run_main()
