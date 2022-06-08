@@ -9,24 +9,27 @@ Created on Mon May 30 22:05:46 2022
 # General libraries
 import pandas as pd  #For working with dataframes
 import numpy as np   #For working with image arrays
-
-#For model building
 import torch
 from torch.utils.data import Dataset
 from sklearn.model_selection import train_test_split
 
 
 class MyData(Dataset):
+    
+    # Setting up the dataset
     def __init__(self, train=True, transform=None):
-        #Loading train.csv
+        
+        #Loading Img_Data.csv
         train_df=pd.read_csv('Img_Data.csv')
-        #Loading image data and merging with train.csv
+        #Loading Images labels from Images_Classes.csv
         df = pd.read_csv('Images_Class.csv')
         #Leaving only image related  columns
         feature=train_df
+        
         #Setting labels
         label_valence=df[:,0]
         label_arousal=df[:,1]
+        
         #Splitting the data into train and validation set
         X_train, X_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test, y_race_train,\
         = train_test_split(feature, label_valence, label_arousal, test_size=0.2)
@@ -46,6 +49,7 @@ class MyData(Dataset):
     def __len__(self):
         return len(self.x)
     
+    #Getting the item from the dataset
     def __getitem__(self, idx):
         image=np.array(self.x.iloc[idx, 0:]).astype(float).reshape(137, 236)
         label1=np.array([self.valence_y.iloc[idx]]).astype('float')
