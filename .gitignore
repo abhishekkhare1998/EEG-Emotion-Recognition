@@ -4,6 +4,7 @@
 **/Python/Data/Stimuli/*.csv
 **/Python/Data/Metadata/*.csv
 **/MATLAB/*.asv
+**/Python/venv/
 **/Python/venv/Include/
 **/Python/venv/Scripts/
 **/Python/venv/Lib
