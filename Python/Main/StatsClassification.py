@@ -147,7 +147,10 @@ def prepare_results(supervised_methods, dataset_dict, is_valence, save_folder):
         cm_display.plot()
         plt.title('Method used - {}, tested on rand Test data'.format(i))
 
-        plt.savefig('{}\\\\{}_on_{}.png'.format(save_folder, i, print_str))
+        if "win" in platform:
+            plt.savefig('{}\\\\{}_on_{}.png'.format(save_folder, i, print_str))
+        if "linux" in platform:
+            plt.savefig(r'{}/{}_on_{}.png'.format(save_folder, i, print_str))
 
         print("percentage accuracy using [{}] on {} = {:.2f}% ".format(i, print_str, percentage_accuracy_output))
 
