@@ -71,7 +71,7 @@ def get_predictions(classification_type, input_data, labels):
 
 def run_main():
     dataset_used = "amigos"  # "amigos" or "dreamer"
-    current_path = os.getcwd()
+    current_path = os.path.realpath(__file__).rsplit("\\", 1)[0]
     dataset_folder_path = os.path.join(current_path, "..", "Data", "Extracted_features")
     dataset_path = dataset_folder_path + r"\\" + dataset_used + ".csv"
     labels_path = dataset_folder_path + r"\\" + dataset_used + "_labels.csv"
@@ -82,7 +82,6 @@ def run_main():
     labels_values_arousal = get_labels_ind(input_scores_data, True)
     supervised_methods = ["svm", "knn", "d_tree", "g_bayes"]
 
-    current_path = os.getcwd()
     now = datetime.datetime.now()
     current_time = now.strftime("%m_%d_%Y_%H_%M_%S")
 
@@ -136,8 +135,4 @@ def prepare_results(supervised_methods, dataset_dict, is_valence, save_folder):
         print("percentage accuracy using [{}] on test data = {:.2f}% ".format(i, percentage_accuracy_real))
 
 
-
-
-
-if __name__=='__main__':
-    run_main()
+run_main()
