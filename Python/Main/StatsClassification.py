@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import random
 import numpy as np
 import datetime
+from sys import platform
 from classification.Amigos.AmigosUtil import AmigosUtil
 
 
@@ -79,9 +80,13 @@ def calculate_accuracy(test_labels, test_predictions, method, is_valence):
 
 def run_main():
     dataset_used = "amigos"  # "amigos" or "dreamer"
-    current_path = os.path.realpath(__file__).rsplit("\\", 2)[0]
-    print(current_path)
-    dataset_folder_path = os.path.join(current_path.rsplit("\\", 1)[0], "Data", "Extracted_features")
+    if "win" in platform:
+        current_path = os.path.realpath(__file__).rsplit("\\", 1)[0]
+        dataset_folder_path = os.path.join(current_path.rsplit("\\", 1)[0], "Data", "Extracted_features")
+    if "linux" in platform:
+        current_path = os.path.realpath(__file__).rsplit("/", 2)[0]
+        dataset_folder_path = os.path.join(current_path.rsplit("/", 1)[0], "Data", "Extracted_features")
+
     dataset_path = dataset_folder_path + r"\\" + dataset_used + ".csv"
     labels_path = dataset_folder_path + r"\\" + dataset_used + "_labels.csv"
     input_data = pd.read_csv(dataset_path, header=None)
