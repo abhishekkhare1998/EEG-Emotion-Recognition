@@ -97,10 +97,6 @@ def run_main():
         plt.close('all')
         print("percentage accuracy using [{}] on training data = {:.2f}% ".format(i, percentage_accuracy_real))
 
-        plt.close('all')
-        print("percentage accuracy using [{}] on training data = {:.2f}% ".format(i, percentage_accuracy))
-
-
         predicted_labels, classifier = get_predictions(i, train_data, training_labels)
         test_predictions = classifier.predict(test_data)
 
@@ -120,8 +116,6 @@ def run_main():
 
         print("percentage accuracy using [{}] on test data = {:.2f}% ".format(i, percentage_accuracy_real))
         a = 1
-        plt.close('all')
-        print("percentage accuracy using [{}] on test data = {:.2f}% ".format(i, percentage_accuracy))
 
 
 
