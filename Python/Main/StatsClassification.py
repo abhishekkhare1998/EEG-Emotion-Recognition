@@ -86,8 +86,8 @@ def run_main():
         dataset_path = dataset_folder_path + r"\\" + dataset_used + ".csv"
         labels_path = dataset_folder_path + r"\\" + dataset_used + "_labels.csv"
     if "linux" in platform:
-        current_path = os.path.realpath(__file__).rsplit("/", 2)[0]
-        dataset_folder_path = os.path.join(current_path.rsplit("/", 1)[0], "Data", "Extracted_features")
+        current_path = os.path.realpath(__file__).rsplit("/", 1)[0]
+        dataset_folder_path = os.path.join(current_path.rsplit(r"/", 1)[0], "Data", "Extracted_features")
         dataset_path = dataset_folder_path + r"/" + dataset_used + ".csv"
         labels_path = dataset_folder_path + r"/" + dataset_used + "_labels.csv"
 
