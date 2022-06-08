@@ -123,6 +123,9 @@ def prepare_results(supervised_methods, dataset_dict, is_valence, save_folder):
                                                                                                     test_predictions,
                                                                                                     i,
                                                                                                     is_valence)
+
+        results_string = ""
+
         cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out_real,
                                             display_labels=["low", "mid", "high"])
         cm_display.plot()
