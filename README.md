@@ -89,4 +89,7 @@ EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>
  ![svm_on_arousal](https://user-images.githubusercontent.com/20601671/172808081-547419d1-36da-40bc-996c-ba790260cd30.png)
 
  
+ ###### Deep Belief Networks Classfication
  
+ ![DBN](https://user-images.githubusercontent.com/20601671/172959043-057b1e69-3392-45b1-b2ea-01cf1ae3fe88.gif)
+
