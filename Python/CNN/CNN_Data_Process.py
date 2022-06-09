@@ -9,6 +9,7 @@ Created on Mon May 30 22:05:46 2022
 # General libraries
 import pandas as pd  #For working with dataframes
 import numpy as np   #For working with image arrays
+import mat73 as mt
 import torch
 from torch.utils.data import Dataset
 from sklearn.model_selection import train_test_split
@@ -20,18 +21,20 @@ class MyData(Dataset):
     def __init__(self, train=True, transform=None):
         
         #Loading Img_Data.csv
-        train_df=pd.read_csv('Img_Data.csv')
+        train_df=mt.loadmat("all_img_amigos.mat")
+        feature = np.array(train_df['Img_Cell'], dtype='uint8')
+        feature = np.uint8(np.reshape(feature,[feature.shape[0],3,128,128]))
         #Loading Images labels from Images_Classes.csv
-        df = pd.read_csv('Images_Class.csv')
+        df = mt.loadmat('Images_Class.mat')
         #Leaving only image related  columns
-        feature=train_df
+        label_int = np.array(df['k'], dtype='uint8')
         
         #Setting labels
-        label_valence=df[:,0]
-        label_arousal=df[:,1]
+        label_valence=label_int[:,0]
+        label_arousal=label_int[:,1]
         
         #Splitting the data into train and validation set
-        X_train, X_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test, y_race_train,\
+        X_train, X_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test\
         = train_test_split(feature, label_valence, label_arousal, test_size=0.2)
         
         if train==True:
@@ -51,11 +54,11 @@ class MyData(Dataset):
     
     #Getting the item from the dataset
     def __getitem__(self, idx):
-        image=np.array(self.x.iloc[idx, 0:]).astype(float).reshape(137, 236)
-        label1=np.array([self.valence_y.iloc[idx]]).astype('float')
-        label2=np.array([self.arousal_y.iloc[idx]]).astype('float')
+        image=torch.from_numpy(self.x[idx]).type(torch.ByteTensor)
+        label1=self.valence_y[idx]
+        label2=self.arousal_y[idx]
         
-        sample={'image': np.uint8(image), 'label_valence': label1,\
+        sample={'image': image, 'label_valence': label1,\
                 'label_arousal': label2}
         
         #Applying transformation
