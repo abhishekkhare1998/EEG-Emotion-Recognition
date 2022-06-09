@@ -100,7 +100,7 @@ EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>
  We then execute the DBN Classification by giving 
  
  ```
-  python3 deepBeliefNetworks.py
+  python3 deepBeliefNetwork.py
  ```
  
  ![DBN](https://user-images.githubusercontent.com/20601671/172959043-057b1e69-3392-45b1-b2ea-01cf1ae3fe88.gif)
