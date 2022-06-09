@@ -58,11 +58,13 @@ pip install -r reqs_linux.txt
 
 ## Reproducing Supervised Statistical Classification
 
-8) Open the directory - 
+1) Open the directory - 
 
+```
 EEG-Emotion-Recognition/Python/Main/
+```
 
-9) Run statistical classification script "StatsClassification.py" - 
+2) Run statistical classification script "StatsClassification.py" - 
 
 ```
 python3 StatsClassification.py
@@ -71,11 +73,17 @@ python3 StatsClassification.py
 ![run_stats_learning](https://user-images.githubusercontent.com/20601671/172800982-581073de-7dd4-4512-8472-6deb03d6969d.gif)
 
 
-10) To check results, browse to the directory - 
+3) To check results, browse to the directory - 
 
+```
 EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>
+```
 
-11) Confusion matrices images are present in this folder, and the text results stored at - EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>/results.txt
+4) Confusion matrices images are present in this folder, and the text results stored at - 
+
+```
+EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>/results.txt
+```
  
  ![check_stats_learning_results](https://user-images.githubusercontent.com/20601671/172803510-c80c5f34-8c31-4279-a069-33661c916fee.gif)
 
@@ -111,7 +119,7 @@ EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>
  
  ![DBN_results](https://user-images.githubusercontent.com/20601671/172959594-c977834a-c228-499d-8e9f-419e64fe92ef.gif)
  
- Valence Classification Accuracy - 51.68 %
+ Valence Classification Accuracy - 51.68 % \\
  Arousal Classification accuracy - 49.66 %
 
 DBN on Arousal Confusion Matrix - 
