@@ -1,7 +1,7 @@
 # EEG-Emotion-Recognition
 Human Emotion recognition using EEG Signals
 
-## Steps to Reproduce : 
+## Setting up the environment
 
 1) Login to dsmlp
 
@@ -56,6 +56,8 @@ pip install -r reqs_linux.txt
 ![pip_install](https://user-images.githubusercontent.com/20601671/172798509-da39a235-9f0b-41b3-8b63-63863b06a30f.gif)
 
 
+## Reproducing Supervised Statistical Classification
+
 8) Open the directory - 
 
 EEG-Emotion-Recognition/Python/Main/
@@ -89,7 +91,7 @@ EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>
  ![svm_on_arousal](https://user-images.githubusercontent.com/20601671/172808081-547419d1-36da-40bc-996c-ba790260cd30.png)
 
  
- ###### Deep Belief Networks Classfication
+ ## Reproducing Deep Belief Networks Classfication
  
  We start in the same folder as we did for Stats Classification i.e.
  
@@ -120,6 +122,6 @@ DBN on Valence Confusion Matrix -
  
  ![DBN_on_valence](https://user-images.githubusercontent.com/20601671/172959919-301c5cbb-0c88-4374-8fed-36df073954b2.png)
  
- ###### AutoEncoder + K-Means Clustering based Classfication - 
-
+ ## Reproducing K-means and autoencoder Classfication
+ 
 
