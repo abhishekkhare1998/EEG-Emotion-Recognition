@@ -59,4 +59,6 @@ EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>
 
 11)confusion matrices images are present in this folder, text results stored at - EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>/results.txt
  
+ ![check_stats_learning_results](https://user-images.githubusercontent.com/20601671/172803510-c80c5f34-8c31-4279-a069-33661c916fee.gif)
+
  
