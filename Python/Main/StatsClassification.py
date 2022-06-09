@@ -1,3 +1,9 @@
+import sys
+
+if sys.version[0:5] != '3.6.8':
+    print("\n you are currently using python version - {},\n\n please use python 3.6.8".format(sys.version[0:5]))
+    sys.exit()
+
 import os
 import pandas as pd
 from sklearn.svm import SVC
@@ -15,7 +21,6 @@ import datetime
 from sys import platform
 import logging
 from classification.Amigos.AmigosUtil import AmigosUtil
-
 
 def get_labels_ind(label_dataframe, is_valence):
     if is_valence:
@@ -158,5 +163,6 @@ def prepare_results(supervised_methods, dataset_dict, is_valence, save_folder):
 
         print("percentage accuracy using [{}] on {} = {:.2f}% ".format(i, print_str, percentage_accuracy_output))
 
+if __name__=='__main__':
 
-run_main()
+    run_main()

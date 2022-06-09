@@ -1,3 +1,8 @@
+import sys
+if sys.version[0:5] != '3.6.8':
+    print("\n you are currently using python version - {},\n\n please use python 3.6.8".format(sys.version[0:5]))
+    sys.exit()
+
 import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
