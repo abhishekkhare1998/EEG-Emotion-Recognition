@@ -12,7 +12,8 @@ import matplotlib.pyplot as plt
 import random
 import numpy as np
 import datetime
-import Utils.classification.confusion_matrix.CM_Util as CM_Util
+from sys import platform
+from classification.Amigos.AmigosUtil import AmigosUtil
 
 
 def get_labels_ind(label_dataframe, is_valence):
@@ -69,12 +70,28 @@ def get_predictions(classification_type, input_data, labels):
     predictions = classifier.predict(input_data)
     return predictions, classifier
 
+
+def calculate_accuracy(test_labels, test_predictions, method, is_valence):
+    acc, cm = AmigosUtil().calculate_accuracy(test_labels,
+                                  test_predictions,
+                                  method,
+                                  is_valence)
+    return acc, cm
+
 def run_main():
     dataset_used = "amigos"  # "amigos" or "dreamer"
-    current_path = os.getcwd()
-    dataset_folder_path = os.path.join(current_path, "..", "Data", "Extracted_features")
-    dataset_path = dataset_folder_path + r"\\" + dataset_used + ".csv"
-    labels_path = dataset_folder_path + r"\\" + dataset_used + "_labels.csv"
+    if "win" in platform:
+        current_path = os.path.realpath(__file__).rsplit("\\", 1)[0]
+        dataset_folder_path = os.path.join(current_path.rsplit("\\", 1)[0], "Data", "Extracted_features")
+        dataset_path = dataset_folder_path + r"\\" + dataset_used + ".csv"
+        labels_path = dataset_folder_path + r"\\" + dataset_used + "_labels.csv"
+    else:
+        current_path = os.path.realpath(__file__).rsplit("/", 1)[0]
+        dataset_folder_path = os.path.join(current_path.rsplit(r"/", 1)[0], "Data", "Extracted_features")
+        dataset_path = dataset_folder_path + r"/" + dataset_used + ".csv"
+        labels_path = dataset_folder_path + r"/" + dataset_used + "_labels.csv"
+
+
     input_data = pd.read_csv(dataset_path, header=None)
     input_scores_data = pd.read_csv(labels_path, header=None)
 
@@ -82,11 +99,12 @@ def run_main():
     labels_values_arousal = get_labels_ind(input_scores_data, True)
     supervised_methods = ["svm", "knn", "d_tree", "g_bayes"]
 
-    current_path = os.getcwd()
     now = datetime.datetime.now()
     current_time = now.strftime("%m_%d_%Y_%H_%M_%S")
 
     save_folder = os.path.join(current_path, "results", current_time)
+    if not os.path.isdir(os.path.join(current_path, "results")):
+        os.mkdir(os.path.join(current_path, "results"))
     if not os.path.isdir(save_folder):
         os.mkdir(save_folder)
 
@@ -119,22 +137,22 @@ def prepare_results(supervised_methods, dataset_dict, is_valence, save_folder):
         predicted_labels, classifier = get_predictions(i, dataset_dict["train_data"], dataset_dict["training_labels"])
         test_predictions = classifier.predict(dataset_dict["test_data"])
 
-        percentage_accuracy_real, confusion_matrix_out_real = CM_Util.CM_Util().calculate_accuracy(dataset_dict["test_labels"],
-                                                                                                    test_predictions,
-                                                                                                    i,
-                                                                                                    is_valence)
-        cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out_real,
+        percentage_accuracy_output, confusion_matrix_output = calculate_accuracy(test_labels=dataset_dict["test_labels"],
+                                                                                 test_predictions=test_predictions,
+                                                                                 method=i,
+                                                                                 is_valence=is_valence)
+
+        cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_output,
                                             display_labels=["low", "mid", "high"])
         cm_display.plot()
         plt.title('Method used - {}, tested on rand Test data'.format(i))
 
-        plt.savefig('{}\\\\{}_on_{}.png'.format(save_folder, i, print_str))
+        if "win" in platform:
+            plt.savefig('{}\\\\{}_on_{}.png'.format(save_folder, i, print_str))
+        else:
+            plt.savefig(r'{}/{}_on_{}.png'.format(save_folder, i, print_str))
 
-        print("percentage accuracy using [{}] on test data = {:.2f}% ".format(i, percentage_accuracy_real))
+        print("percentage accuracy using [{}] on {} = {:.2f}% ".format(i, print_str, percentage_accuracy_output))
 
 
-
-
-
-if __name__=='__main__':
-    run_main()
+run_main()
