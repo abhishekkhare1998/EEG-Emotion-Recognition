@@ -38,6 +38,8 @@ pip install --upgrade pip
 
 pip install -r reqs_linux.txt
 
+![pip_install](https://user-images.githubusercontent.com/20601671/172798509-da39a235-9f0b-41b3-8b63-63863b06a30f.gif)
+
 
 8) go to the directory - 
  
