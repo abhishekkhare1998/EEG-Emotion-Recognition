@@ -119,8 +119,8 @@ EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>/results.txt
  
  ![DBN_results](https://user-images.githubusercontent.com/20601671/172959594-c977834a-c228-499d-8e9f-419e64fe92ef.gif)
  
- Valence Classification Accuracy - 51.68 %.   
- Arousal Classification accuracy - 49.66 %.  
+ Valence Classification Accuracy - 51.68 % \\
+ Arousal Classification accuracy - 49.66 %
 
 DBN on Arousal Confusion Matrix - 
  
@@ -132,4 +132,5 @@ DBN on Valence Confusion Matrix -
  
  ## Reproducing K-means and autoencoder Classfication
  
+![run_autoencoder](https://user-images.githubusercontent.com/20601671/172961438-926d467a-a34c-495b-9d82-551c9a5bcf07.gif)
 
