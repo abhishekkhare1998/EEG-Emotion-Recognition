@@ -11,7 +11,6 @@ Created on Mon May 30 22:14:59 2022
 import torch
 from CNN_Data_Process import MyData
 from torch.utils.data import DataLoader
-import CNN_Model
 import numpy as np
 from torch import nn, optim
 from torch.nn import functional as F
@@ -59,10 +58,9 @@ class CNN1(nn.Module):
         label2 = F.log_softmax(label2, dim=1)
         return {'label1': label1, 'label2': label2}
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 #Setting model and moving to device incase of GPU
-model_CNN = CNN1(True).to(device)
+model_CNN = CNN1(True)
 
 #For multilabel output: Valence and Arousal
 criterion_multioutput = nn.CrossEntropyLoss()
@@ -84,11 +82,13 @@ def train_model(model, criterion1, optimizer, n_epochs=100):
         model.train()
         for batch_idx, sample_batched in enumerate(train_dataloader):
             # importing data and moving to GPU
-            image, label1, label2 = sample_batched['image'].to(device),\
-                                             sample_batched['label_valence'].to(device),\
-                                              sample_batched['label_arousal'].to(device) 
+            image, label1, label2 = sample_batched['image'],\
+                                             sample_batched['label_valence'],\
+                                              sample_batched['label_arousal'] 
             # zero the parameter gradients
             optimizer.zero_grad()
+            #image.byte()
+            print(image.dtype)
             output=model(image)
             label1_hat=output['label1']
             label2_hat=output['label2']
@@ -112,10 +112,12 @@ def train_model(model, criterion1, optimizer, n_epochs=100):
         # validate the model #
         model.eval()
         for batch_idx, sample_batched in enumerate(test_dataloader):
-            image, label1, label2 = sample_batched['image'].to(device),\
-                                             sample_batched['label_valence'].to(device),\
-                                              sample_batched['label_arousal'].to(device)  
-            output = model(image)
+            image, label1, label2 = sample_batched['image'],\
+                                             sample_batched['label_valence'],\
+                                              sample_batched['label_arousal']
+            #image.byte()
+            print(image.dtype)
+            
             output=model(image)
             label1_hat=output['label1']
             label2_hat=output['label2']
