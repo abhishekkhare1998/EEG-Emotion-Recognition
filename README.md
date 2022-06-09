@@ -124,11 +124,13 @@ EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>/results.txt
 
 DBN on Arousal Confusion Matrix - 
  
- ![DBN_on_arousal](https://user-images.githubusercontent.com/20601671/172959875-735d2a18-06f0-4261-a16b-447f6bda14eb.png)
+<img width="320" alt="DBN_on_arousal" src="https://user-images.githubusercontent.com/20601671/172962622-57972555-840f-4762-9ac9-ab16bfacae79.png">
+
  
 DBN on Valence Confusion Matrix - 
  
- ![DBN_on_valence](https://user-images.githubusercontent.com/20601671/172959919-301c5cbb-0c88-4374-8fed-36df073954b2.png)
+ <img width="320" alt="DBN_on_valence" src="https://user-images.githubusercontent.com/20601671/172962583-31aa96d8-4d20-4862-9596-2620a140d8cf.png">
+
  
  ## Reproducing K-means and autoencoder Classfication
  
