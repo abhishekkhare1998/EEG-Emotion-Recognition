@@ -4,6 +4,8 @@ Human Emotion recognition using EEG Signals
 Steps to Reproduce : 
 
 1) login to dsmlp
+<img width="623" alt="image" src="https://user-images.githubusercontent.com/20601671/172782575-28bf9014-5f8a-4eb0-951d-5b6abfc745ea.png">
+
 
 2) create a project folder - 
 
