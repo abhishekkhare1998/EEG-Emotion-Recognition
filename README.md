@@ -50,6 +50,9 @@ EEG-Emotion-Recognition/Python/Main/
 
 python3 StatsClassification.py
 
+![run_stats_learning](https://user-images.githubusercontent.com/20601671/172800982-581073de-7dd4-4512-8472-6deb03d6969d.gif)
+
+
 10) to check results, go to - 
 
 EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>
