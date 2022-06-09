@@ -19,6 +19,7 @@ import pandas as pd
 import math
 import random
 from classification.Amigos.AmigosUtil import AmigosUtil
+from sys import platform
 
 
 def create_labels(label_dataframe):
@@ -62,12 +63,24 @@ def create_labels_ind(label_dataframe, index):
     return va_list
 
 dataset_used = "amigos"  # "amigos" or "dreamer"
-current_path = os.getcwd()
-dataset_folder_path = os.path.join(current_path, "..", "Data", "Extracted_features")
-dataset_path = dataset_folder_path + r"\\" + dataset_used + ".csv"
-labels_path = dataset_folder_path + r"\\" + dataset_used + "_labels.csv"
+#current_path = os.getcwd()
+#dataset_folder_path = os.path.join(current_path, "..", "Data", "Extracted_features")
+#dataset_path = dataset_folder_path + r"\\" + dataset_used + ".csv"
+#labels_path = dataset_folder_path + r"\\" + dataset_used + "_labels.csv"
+
+if "win" in platform:
+	current_path = os.path.realpath(__file__).rsplit("\\", 1)[0]
+	dataset_folder_path = os.path.join(current_path.rsplit("\\", 1)[0], "Data", "Extracted_features")
+else:
+	current_path = os.path.realpath(__file__).rsplit("/", 1)[0]
+	dataset_folder_path = os.path.join(current_path.rsplit(r"/", 1)[0], "Data", "Extracted_features")
+
+dataset_path = os.path.join(dataset_folder_path, dataset_used + ".csv")
+labels_path = os.path.join(dataset_folder_path, dataset_used + "_labels.csv")
+
 input_data = pd.read_csv(dataset_path, header=None)
 input_scores_data = pd.read_csv(labels_path, header=None)
+
 labels_values_valence = create_labels_ind(input_scores_data,0)
 labels_values_arousal = create_labels_ind(input_scores_data,1)
 
