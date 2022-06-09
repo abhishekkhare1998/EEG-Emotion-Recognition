@@ -84,15 +84,12 @@ def run_main():
     if "win" in platform:
         current_path = os.path.realpath(__file__).rsplit("\\", 1)[0]
         dataset_folder_path = os.path.join(current_path.rsplit("\\", 1)[0], "Data", "Extracted_features")
-        dataset_path = dataset_folder_path + r"\\" + dataset_used + ".csv"
-        labels_path = dataset_folder_path + r"\\" + dataset_used + "_labels.csv"
-
     else:
         current_path = os.path.realpath(__file__).rsplit("/", 1)[0]
         dataset_folder_path = os.path.join(current_path.rsplit(r"/", 1)[0], "Data", "Extracted_features")
-        dataset_path = dataset_folder_path + r"/" + dataset_used + ".csv"
-        labels_path = dataset_folder_path + r"/" + dataset_used + "_labels.csv"
 
+    dataset_path = os.path.join(dataset_folder_path, dataset_used + ".csv")
+    labels_path = os.path.join(dataset_folder_path, dataset_used + "_labels.csv")
 
     input_data = pd.read_csv(dataset_path, header=None)
     input_scores_data = pd.read_csv(labels_path, header=None)
@@ -104,7 +101,7 @@ def run_main():
     now = datetime.datetime.now()
     current_time = now.strftime("%m_%d_%Y_%H_%M_%S")
 
-    save_folder = os.path.join(current_path, "results", current_time)
+    save_folder = os.path.join(current_path, "results", current_time+"stats_learn")
     if not os.path.isdir(os.path.join(current_path, "results")):
         os.mkdir(os.path.join(current_path, "results"))
     if not os.path.isdir(save_folder):
@@ -158,8 +155,6 @@ def prepare_results(supervised_methods, dataset_dict, is_valence, save_folder):
 
         with open(os.path.join(save_folder, "results.txt"), 'a', encoding='utf-8') as f:
             f.write(conf_matrix_prnt)
-
-        logging.info(conf_matrix_prnt)
 
         print("percentage accuracy using [{}] on {} = {:.2f}% ".format(i, print_str, percentage_accuracy_output))
 
