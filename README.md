@@ -138,3 +138,12 @@ DBN on Valence Confusion Matrix -
 
 ![autoencoder_Results](https://user-images.githubusercontent.com/20601671/172962117-b8f82edd-3070-49e7-96cf-a85a72f6cb6a.gif)
 
+Confusion Matrix for Arousal Classification:
+
+![Autoencoder_KMeans_on_arousal](https://user-images.githubusercontent.com/20601671/172962336-27164642-b816-472f-a300-a96ec41d0098.png)
+
+Confusion Matrix for Valence Classification:
+
+![Autoencoder_KMeans_on_valence](https://user-images.githubusercontent.com/20601671/172962371-69555df0-e663-4626-b491-d9cd27fa0280.png)
+
+
