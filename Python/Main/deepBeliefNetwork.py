@@ -10,12 +10,17 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 from dbn.tensorflow import SupervisedDBNRegression
 import numpy as np
+from sys import platform
+from classification.Amigos.AmigosUtil import AmigosUtil
+import datetime
 
-def create_labels_ind(label_dataframe):
-    #valence_data = label_dataframe.iloc[:, 0]
-    valence_data = label_dataframe.iloc[:, 1]
+def get_labels_ind(label_dataframe, is_valence):
+    if is_valence:
+        class_data = label_dataframe.iloc[:, 0]
+    else:
+        class_data = label_dataframe.iloc[:, 1]
     va_list = []
-    for i in valence_data:
+    for i in class_data:
         if i <= 3.5:
             va_list.append(1)
         if (i > 3.5) and (i <= 6.5):
@@ -54,39 +59,68 @@ def create_labels(label_dataframe):
 
 def run_main():
     dataset_used = "amigos"  # "amigos" or "dreamer"
-    current_path = os.path.dirname(__file__)
-    dataset_folder_path = os.path.join(current_path, "..", "Data", "Extracted_features")
-    dataset_path = dataset_folder_path + r"\\" + dataset_used + ".csv"
-    labels_path = dataset_folder_path + r"\\" + dataset_used + "_labels.csv"
+    if "win" in platform:
+        current_path = os.path.realpath(__file__).rsplit("\\", 1)[0]
+        dataset_folder_path = os.path.join(current_path.rsplit("\\", 1)[0], "Data", "Extracted_features")
+    else:
+        current_path = os.path.realpath(__file__).rsplit("/", 1)[0]
+        dataset_folder_path = os.path.join(current_path.rsplit(r"/", 1)[0], "Data", "Extracted_features")
+
+    dataset_path = os.path.join(dataset_folder_path, dataset_used + ".csv")
+    labels_path = os.path.join(dataset_folder_path, dataset_used + "_labels.csv")
+
     input_data = pd.read_csv(dataset_path, header=None)
     input_scores_data = pd.read_csv(labels_path, header=None)
 
-    labels_values = create_labels(input_scores_data)
+    now = datetime.datetime.now()
+    current_time = now.strftime("%m_%d_%Y_%H_%M_%S")
 
-    is_supervised = False
+    save_folder = os.path.join(current_path, "results", current_time+"DBN_learn")
+    if not os.path.isdir(os.path.join(current_path, "results")):
+        os.mkdir(os.path.join(current_path, "results"))
+    if not os.path.isdir(save_folder):
+        os.mkdir(save_folder)
+
+    labels_values_valence = get_labels_ind(input_scores_data, True)
+    labels_values_arousal = get_labels_ind(input_scores_data, False)
+
+    is_supervised = True
 
     if(is_supervised):
         ss = StandardScaler()
         input_data = ss.fit_transform(input_data)
-        x_train, x_test, y_train, y_test = train_test_split(input_data, labels_values, test_size=0.2)
-        clasifier = SupervisedDBNClassification(hidden_layers_structure=[100, 100, 100, 100], learning_rate_rbm=0.05,
-                                            learning_rate=0.05, n_epochs_rbm=5, n_iter_backprop=10, batch_size=8,
-                                            activation_function='relu', dropout_p=0.2)
-        clasifier.fit(x_train, y_train)
-        y_pred = clasifier.predict(x_test)
 
-        accuracy_percentage = accuracy_score(y_test, y_pred)
-        confusion_matrix_out = confusion_matrix(y_test, y_pred)
+        for types in ["valence", "arousal"]:
+            if types == "valence":
+                input_labels = labels_values_valence
+                is_valence = True
+            else:
+                input_labels = labels_values_arousal
+                is_valence = False
 
-        cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_out,
-                                        display_labels=[1, 2, 3])
-        cm_display.plot()
-        plt.title('Method used - {}, tested on training data'.format("dbn"))
-        plt.savefig('{}\\{}_on_training.png'.format(current_path, "dbn"))
-        plt.show()
+            x_train, x_test, y_train, y_test = train_test_split(input_data, input_labels, test_size=0.2)
+            clasifier = SupervisedDBNClassification(hidden_layers_structure=[100, 100, 100, 100], learning_rate_rbm=0.05,
+                                                learning_rate=0.05, n_epochs_rbm=5, n_iter_backprop=10, batch_size=8,
+                                                activation_function='relu', dropout_p=0.2, verbose=False)
+            clasifier.fit(x_train, y_train)
+            y_predict = clasifier.predict(x_test)
 
-        plt.close('all')
-        print("percentage accuracy using [{}] on training data = {:.2f}% ".format("dbn", accuracy_percentage * 100))
+            percentage_accuracy_output, confusion_matrix_output = calculate_accuracy(test_labels=y_test,
+                                                                                 test_predictions=y_predict,
+                                                                                 method="DBN",
+                                                                                 is_valence=is_valence)
+
+            cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_output,
+                                            display_labels=["low", "mid", "high"])
+            cm_display.plot()
+            plt.title('Method used - {}, tested on training data'.format("dbn"))
+
+            plt.savefig(os.path.join(save_folder, r'DBN_on_{}.png'.format(types)))
+
+            conf_matrix_prnt = "Method used - DBN, tested on |{}| \n accuracy percentage - {:.2f} \n true class on y axis \n {} \n\n".format(types, percentage_accuracy_output, str(confusion_matrix_output))
+            with open(os.path.join(save_folder, "results.txt"), 'a', encoding='utf-8') as f:
+                f.write(conf_matrix_prnt)
+            print("percentage accuracy using [{}] on test data = {:.2f}% ".format("dbn", percentage_accuracy_output))
     else:
         valence_data = input_scores_data.iloc[:, 0]
         arousal_data = input_scores_data.iloc[:, 1]
@@ -100,15 +134,22 @@ def run_main():
                                             n_epochs_rbm=20,
                                             n_iter_backprop=200,
                                             batch_size=16,
-                                            activation_function='relu')
+                                            activation_function='relu',
+                                            verbose=False)
         regressor.fit(input_data, np.array(labels_values))
 
         # Test
         X_test = min_max_scaler.transform(input_data)
         Y_pred = regressor.predict(X_test)
-        a = 1
 
-    a = 1
+
+def calculate_accuracy(test_labels, test_predictions, method, is_valence):
+    acc, cm = AmigosUtil().calculate_accuracy(test_labels,
+                                  test_predictions,
+                                  method,
+                                  is_valence)
+    return acc, cm
+
 
 if __name__=='__main__':
     run_main()

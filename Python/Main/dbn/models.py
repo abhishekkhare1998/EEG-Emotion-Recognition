@@ -119,7 +119,6 @@ class BinaryRBM(BaseEstimator, TransformerMixin, BaseModel):
                 self.c += self.learning_rate * (accum_delta_c / self.batch_size)
             if self.verbose:
                 error = self._compute_reconstruction_error(data)
-                print(">> Epoch %d finished \tRBM Reconstruction error %f" % (iteration, error))
 
     def _contrastive_divergence(self, vector_visible_units):
         """
