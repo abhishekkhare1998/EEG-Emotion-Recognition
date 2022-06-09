@@ -28,6 +28,8 @@ Project_folder/EEG-Emotion-Recognition/Python/
 
 6)activate the virtualenv
 
+![activate_venv](https://user-images.githubusercontent.com/20601671/172796146-8acc0cf5-fb3a-41e8-a635-1fb476b59a4f.gif)
+
  source venv/bin/activate
 
 7)install the linux requirements
