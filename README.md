@@ -10,16 +10,18 @@ Human Emotion recognition using EEG Signals
 
 2) create a project folder - 
 
-'''
+```
 mkdir Final
-'''
+```
 
 3) clone the repository using - 
 
 ![git_clone](https://user-images.githubusercontent.com/20601671/172794481-05989539-82fd-4861-bf71-aa6f9c5cd3bd.gif)
-'''
+
+```
 git clone https://github.com/abhishekkhare1998/EEG-Emotion-Recognition.git
-'''
+```
+
 
 4) go to the directory - 
 
