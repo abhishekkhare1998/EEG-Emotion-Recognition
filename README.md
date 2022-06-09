@@ -134,3 +134,7 @@ DBN on Valence Confusion Matrix -
  
 ![run_autoencoder](https://user-images.githubusercontent.com/20601671/172961438-926d467a-a34c-495b-9d82-551c9a5bcf07.gif)
 
+###### K-Means and autoencoder Classification : checking results
+
+![autoencoder_Results](https://user-images.githubusercontent.com/20601671/172962117-b8f82edd-3070-49e7-96cf-a85a72f6cb6a.gif)
+
