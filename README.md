@@ -8,11 +8,13 @@ Steps to Reproduce :
 ![dsmlp_login_final1](https://user-images.githubusercontent.com/20601671/172792891-98d5c836-6b40-4def-b3ce-a4e4c37127dc.gif)
 
 
-
-
 2) create a project folder - 
 
+mkdir Final
+
 3) clone the repository using - 
+
+![git_clone](https://user-images.githubusercontent.com/20601671/172794481-05989539-82fd-4861-bf71-aa6f9c5cd3bd.gif)
 
 git clone https://github.com/abhishekkhare1998/EEG-Emotion-Recognition.git
 
@@ -20,7 +22,7 @@ git clone https://github.com/abhishekkhare1998/EEG-Emotion-Recognition.git
 
 Project_folder/EEG-Emotion-Recognition/Python/
 
-5)create a virtualenv (make sure you are using python 3.6.8, [python --version])
+5)create a virtualenv (make sure you are using python 3.6.8, [python3 --version])
 
  python3 -m venv ./venv
 
