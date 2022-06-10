@@ -1,1 +1,1 @@
-EEG baseline info
+This Directory contains EEG baseline info, Raw Data Not included in Github Repo because its too large

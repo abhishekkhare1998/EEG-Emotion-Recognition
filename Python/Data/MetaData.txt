@@ -1,3 +1,5 @@
 EEG_SamplingRate : 128,
 noOfSubject : 23,
 noOfVideoSequences : 18,
+
+This Directory Contains the Stimuli Info. Raw Data Not included in Github Repo because its too large.
