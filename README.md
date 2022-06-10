@@ -88,13 +88,13 @@ EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>/results.txt
  ![check_stats_learning_results](https://user-images.githubusercontent.com/20601671/172803510-c80c5f34-8c31-4279-a069-33661c916fee.gif)
 
  
- Sample Confusion Matrices
+  ###### Sample Confusion Matrices
  
- a) Valence Classification (Method used ==> KNN) - 
+  ###### a) Valence Classification (Method used ==> KNN) - 
  
  ![knn_on_valence](https://user-images.githubusercontent.com/20601671/172807698-7a80b2f6-3e13-4473-a89c-05047476a1c9.png)
 
- b) Arousal Classification (Method used ==> SVM) - 
+  ###### b) Arousal Classification (Method used ==> SVM) - 
  
  ![svm_on_arousal](https://user-images.githubusercontent.com/20601671/172808081-547419d1-36da-40bc-996c-ba790260cd30.png)
 
@@ -119,15 +119,16 @@ EEG-Emotion-Recognition/Python/Main/Results/<timestamp folder>/results.txt
  
  ![DBN_results](https://user-images.githubusercontent.com/20601671/172959594-c977834a-c228-499d-8e9f-419e64fe92ef.gif)
  
- Valence Classification Accuracy - 51.68 % \\
+ Valence Classification Accuracy - 51.68 %
+ 
  Arousal Classification accuracy - 49.66 %
 
-DBN on Arousal Confusion Matrix - 
+###### DBN on Arousal Confusion Matrix - 
  
 <img width="320" alt="DBN_on_arousal" src="https://user-images.githubusercontent.com/20601671/172962622-57972555-840f-4762-9ac9-ab16bfacae79.png">
 
  
-DBN on Valence Confusion Matrix - 
+###### DBN on Valence Confusion Matrix - 
  
  <img width="320" alt="DBN_on_valence" src="https://user-images.githubusercontent.com/20601671/172962583-31aa96d8-4d20-4862-9596-2620a140d8cf.png">
 
@@ -140,11 +141,15 @@ DBN on Valence Confusion Matrix -
 
 ![autoencoder_Results](https://user-images.githubusercontent.com/20601671/172962117-b8f82edd-3070-49e7-96cf-a85a72f6cb6a.gif)
 
-Confusion Matrix for Arousal Classification:
+ Valence Classification Accuracy - 42.28 %
+ 
+ Arousal Classification accuracy - 40.27 %
+
+###### Confusion Matrix for Arousal Classification:
 
 ![Autoencoder_KMeans_on_arousal](https://user-images.githubusercontent.com/20601671/172962336-27164642-b816-472f-a300-a96ec41d0098.png)
 
-Confusion Matrix for Valence Classification:
+###### Confusion Matrix for Valence Classification:
 
 ![Autoencoder_KMeans_on_valence](https://user-images.githubusercontent.com/20601671/172962371-69555df0-e663-4626-b491-d9cd27fa0280.png)
 
