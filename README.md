@@ -1,5 +1,12 @@
 # EEG-Emotion-Recognition
-Human Emotion recognition using EEG Signals
+We aim to understand the hidden patterns in the feature extracted EEG data points and exploit them
+to develop a framework that can learn these patterns independently. For this reason, we have focused
+on supervised and unsupervised learning methods. The supervised learning approach establishes a
+benchmark that unsupervised learning approaches try to achieve. 
+
+Our design used three values to define valence and arousal, effectively low, mid, and high. We use
+this understanding to assess all our supervised learning models in their prediction of valence and
+arousal separately.
 
 ## Setting up the environment
 
