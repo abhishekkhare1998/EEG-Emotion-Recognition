@@ -9,7 +9,7 @@ this understanding to assess all our supervised learning models in their predict
 arousal separately.
 
 Feature Extraction was done using MATLAB scripts, for getting input features vectors (1x42) - "feature_extract.m" and for RBG Heatmaps - "RBGHeatmap.m". 
-For reproduction mentioned below we are using the already extracted features from amigos dataset due to storage space constraints.
+For reproduction mentioned below, we are using the already extracted features from the Amigos dataset due to storage space constraints.
 
 ## Setting up the environment
 
