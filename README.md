@@ -8,6 +8,9 @@ Our design used three values to define valence and arousal, effectively low, mid
 this understanding to assess all our supervised learning models in their prediction of valence and
 arousal separately.
 
+Feature Extraction was done using MATLAB scripts, for getting input features vectors (1x42) - "feature_extract.m" and for RBG Heatmaps - "RBGHeatmap.m". 
+For reproduction mentioned below we are using the already extracted features from amigos dataset due to storage space constraints.
+
 ## Setting up the environment
 
 1) Login to dsmlp
