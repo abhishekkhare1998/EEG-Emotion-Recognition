@@ -1,6 +1,5 @@
-
-import numpy as np
 from matplotlib import pyplot as plt
+
 
 class ComputePsd:
     def __init__(self, signal):
@@ -31,4 +30,4 @@ class ComputePsd:
         plt.tight_layout()
 
         plt.show()
-        a = 1
+

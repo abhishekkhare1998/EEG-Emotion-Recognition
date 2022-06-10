@@ -1,23 +1,31 @@
 import sys
+"""
+ This Project Works exclusively with Python 3.6.8 and the libraries based on python linux requirements 
+ (reqs_linux.txt),
+ please use a virtual environment configured with python 3.6.8 and install the libraries in linux-reqs.txt
+ This is an essential part of setting the environment, working without setting up the environment properly 
+ would lead to numerous environmental errors
+ """
 if sys.version[0:5] != '3.6.8':
     print("\n you are currently using python version - {},\n\n please use python 3.6.8".format(sys.version[0:5]))
     sys.exit()
 
 import os
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from dbn.tensorflow import SupervisedDBNClassification
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import ConfusionMatrixDisplay
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import MinMaxScaler
-from dbn.tensorflow import SupervisedDBNRegression
 import numpy as np
 from sys import platform
-from classification.Amigos.AmigosUtil import AmigosUtil
 import datetime
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+
+from sklearn.preprocessing import MinMaxScaler
+from dbn.tensorflow import SupervisedDBNRegression
+from dbn.tensorflow import SupervisedDBNClassification
+from classification.Amigos.AmigosUtil import AmigosUtil
+
 
 def get_labels_ind(label_dataframe, is_valence):
     if is_valence:
@@ -57,13 +65,14 @@ def create_labels(label_dataframe):
 
     labels_str_list = ["{}{}".format(va, aa) for va, aa in zip(va_list, aa_list)]
 
-    labels_dict = {"LVLA": 1, "LVMA": 2, "LVHA": 3, "MVLA": 4, "MVMA": 5, "MVHA": 6, "HVLA": 7, "HVMA": 8, "HVHA": 9}
+    labels_dict = {"LVLA": 1, "LVMA": 2, "LVHA": 3, "MVLA": 4,
+                   "MVMA": 5, "MVHA": 6, "HVLA": 7, "HVMA": 8, "HVHA": 9}
     labels_num = [labels_dict[i] for i in labels_str_list]
     return labels_num
 
 
 def run_main():
-    dataset_used = "amigos"  # "amigos" or "dreamer"
+    dataset_used = "amigos"  # USE EITHER "amigos" OR "dreamer"
     if "win" in platform:
         current_path = os.path.realpath(__file__).rsplit("\\", 1)[0]
         dataset_folder_path = os.path.join(current_path.rsplit("\\", 1)[0], "Data", "Extracted_features")
@@ -91,7 +100,7 @@ def run_main():
 
     is_supervised = True
 
-    if(is_supervised):
+    if is_supervised:
         ss = StandardScaler()
         input_data = ss.fit_transform(input_data)
 
@@ -104,19 +113,21 @@ def run_main():
                 is_valence = False
 
             x_train, x_test, y_train, y_test = train_test_split(input_data, input_labels, test_size=0.2)
-            clasifier = SupervisedDBNClassification(hidden_layers_structure=[100, 100, 100, 100], learning_rate_rbm=0.05,
-                                                learning_rate=0.05, n_epochs_rbm=5, n_iter_backprop=10, batch_size=8,
-                                                activation_function='relu', dropout_p=0.2, verbose=False)
+            clasifier = SupervisedDBNClassification(hidden_layers_structure=[100, 100, 100, 100],
+                                                    learning_rate_rbm=0.05,
+                                                    learning_rate=0.05, n_epochs_rbm=5, n_iter_backprop=10,
+                                                    batch_size=8, activation_function='relu', dropout_p=0.2,
+                                                    verbose=False)
             clasifier.fit(x_train, y_train)
             y_predict = clasifier.predict(x_test)
 
             percentage_accuracy_output, confusion_matrix_output = calculate_accuracy(test_labels=y_test,
-                                                                                 test_predictions=y_predict,
-                                                                                 method="DBN",
-                                                                                 is_valence=is_valence)
+                                                                                     test_predictions=y_predict,
+                                                                                     method="DBN",
+                                                                                     is_valence=is_valence)
 
             cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_output,
-                                            display_labels=["low", "mid", "high"])
+                                                display_labels=["low", "mid", "high"])
             cm_display.plot()
             plt.title('Method used - {}, tested on TEST data'.format("dbn"))
 
@@ -141,11 +152,11 @@ def run_main():
                                             batch_size=16,
                                             activation_function='relu',
                                             verbose=False)
-        regressor.fit(input_data, np.array(labels_values))
+        regressor.fit(input_data, np.array(labels_values_valence))
 
         # Test
         X_test = min_max_scaler.transform(input_data)
-        Y_pred = regressor.predict(X_test)
+        y_prediction = regressor.predict(X_test)
 
 
 def calculate_accuracy(test_labels, test_predictions, method, is_valence):

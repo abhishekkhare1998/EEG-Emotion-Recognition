@@ -1,8 +1,7 @@
-import os
 from matplotlib import pyplot as plt
-from scipy.fft import fft, fftfreq
 import numpy as np
 import matplotlib.pyplot as plotter
+
 
 class GeneralUtils:
     def __init__(self):
@@ -53,10 +52,7 @@ class GeneralUtils:
 
         axis.set_ylabel('Amplitude')
 
-
-
         """
-        
         yf = fft(signal)
         sample_rate = 128
         xf = fftfreq(len(signal), 1 / sample_rate)

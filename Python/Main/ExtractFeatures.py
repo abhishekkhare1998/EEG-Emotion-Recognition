@@ -1,10 +1,11 @@
+"""
+This File is used as a part of feature extraction.
+"""
+
 import os
-import sys
-import scipy
-import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
-from scipy.fft import fft, fftfreq
+import matplotlib.pyplot as plt
+
 import Utils.GeneralUtils as g_util
 import Utils.ComputePsd as psd_util
 
@@ -14,10 +15,11 @@ class ExtractFeatures:
 
     def use_fft(self, signal, point):
         """
-        | compute FFT of incoming signal
-        :return: fft values
+        | set FFT of incoming signal
+        :return: None
         """
-        pass
+        self.signal = point
+
 
 class Data:
     def __init__(self):
@@ -81,6 +83,12 @@ class Data:
             return req_signal
 
     def extract_signal_for_person(self, person_id, path):
+        """
+        | Method used for extracting signal for 1 person
+        :param person_id: unique ID for the test subject
+        :param path: folder path for data
+        :return: person's signal data
+        """
         person_dict = {}
         for file in os.listdir(path):
             if file.endswith("csv"):
@@ -94,8 +102,11 @@ class Data:
         return person_seq
 
 
-
 def extract_features():
+    """
+    | Main Function for extracting the EEG signals data and features
+    :return: None
+    """
     gen_util_object = g_util.GeneralUtils()
 
     project_root = os.path.abspath(__file__).rsplit("\\", 2)[0]
@@ -104,9 +115,9 @@ def extract_features():
     metadata_folder = os.path.join(project_root, "Data\\Metadata")
     data_object = Data()
 
-    #data_object.plot_signal(sig_type='stimuli', person_id=21, emotion_seq=17, electrode_num=13)
-    #data_object.plot_signal(sig_type='baseline', person_id=1, emotion_seq=1, electrode_num=1)
-    #data_object.populate_all_signals()
+    data_object.plot_signal(sig_type='stimuli', person_id=21, emotion_seq=17, electrode_num=13)
+    data_object.plot_signal(sig_type='baseline', person_id=1, emotion_seq=1, electrode_num=1)
+    data_object.populate_all_signals()
 
     input_signal = data_object.get_exact_signal(sig_type='baseline', person_id=22, emotion_seq=17, electrode_num=13)
     new_inp_signal = gen_util_object.remove_dc(input_signal)
@@ -114,11 +125,9 @@ def extract_features():
 
     psd_util_obj = psd_util.ComputePsd(new_inp_signal)
     psd_util_obj.compute()
-    a = 1
-    """
-    for plotting all signals
-    
-    
+
+    # To be used for plotting all signals
+
     person_base_data = data_object.extract_signal_for_person(3, baseline_signal_folder)
     person_stimuli_data = data_object.extract_signal_for_person(3, stimuli_signal_folder)
     
@@ -131,7 +140,7 @@ def extract_features():
     for index, col in person_base_data[0].T.iterrows():
         plt.figure(temp+index+1)
         gen_util_object.plot_signal(col)
-    """
+
 
 if __name__ == '__main__':
     extract_features()
