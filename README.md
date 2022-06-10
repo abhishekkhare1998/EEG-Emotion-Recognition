@@ -12,6 +12,10 @@ arousal separately.
 
 1) Login to dsmlp
 
+```
+ssh <user_name>@dsmlp-login.ucsd.edu
+```
+
 ![dsmlp_login_final1](https://user-images.githubusercontent.com/20601671/172792891-98d5c836-6b40-4def-b3ce-a4e4c37127dc.gif)
 
 
@@ -32,7 +36,9 @@ git clone https://github.com/abhishekkhare1998/EEG-Emotion-Recognition.git
 
 4) Open the directory - 
 
-<Project_folder>/EEG-Emotion-Recognition/Python/
+```
+cd <Project_folder>/EEG-Emotion-Recognition/Python/
+```
 
 5) Create a virtual Environment (make sure you are using python 3.6.8, [python3 --version])
 
