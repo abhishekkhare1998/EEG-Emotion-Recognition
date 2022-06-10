@@ -118,7 +118,7 @@ def run_main():
             cm_display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix_output,
                                             display_labels=["low", "mid", "high"])
             cm_display.plot()
-            plt.title('Method used - {}, tested on training data'.format("dbn"))
+            plt.title('Method used - {}, tested on TEST data'.format("dbn"))
 
             plt.savefig(os.path.join(save_folder, r'DBN_on_{}.png'.format(types)))
 
